@@ -82,7 +82,6 @@
 <button onclick="showPage('innovation')">🧱 Innovation Highlights</button>
 <button onclick="showPage('quiz')">🧩 Flood Quiz</button>
 <button onclick="showPage('scaling')">🇮🇳 Scaling for Bharat</button>
-<button onclick="showPage('news')">📰 News</button>
 </div>
 
 <div id="pageContent" style="margin-top:30px;">
@@ -276,9 +275,9 @@ function showPage(page){
  if(page==='plan')
     content.innerHTML=`
       <h2>🏠 Flood Resistant House</h2>
-      <p>Flood-resistant houses combine modern architecture with safety engineering. Built to float or stand above flood levels, these designs focus on sustainability, safety, and affordability.</p>
+      <p>Flood resistant houses combine modern architecture with safety engineering, They are built to float or stand above flood levels and these designs focus on sustainability, safety, and affordability.</p>
       <ul>
-        <li>🗼 Elevated on reinforced stilts or amphibious platforms</li>
+        <li>🗼 Elevated on sturdy and reinforced platforms</li>
         <li>🪵 Use of waterproof materials and hydrophobic coatings</li>
         <li>🔋 Solar panels and rainwater harvesting systems</li>
         <li>🌿 Green surroundings that improve soil drainage</li>
@@ -533,7 +532,7 @@ else if(page==='help'){
           <li>Training: community build workshops & maintenance manuals</li>
         </ul>
       </div>
-      <p class="small-note">For deployment, pilot 100 houses in a high-risk district, measure outcomes, then expand via government-NGO partnership.</p>
+      
     `;
   } else if(page==='jalshakti'){
     content.innerHTML = `
@@ -557,15 +556,7 @@ else if(page==='help'){
       </div>
       <p class="small-note" style="margin-top:12px;">(This is a prototype listing for demo purposes.)</p>
     `;
-  } else if(page==='news'){
-    content.innerHTML = `
-      <h2>📰 News</h2>
-      <div class="news-list">
-        <div class="news-item">✅ <strong>Update:</strong> Currently no active floods reported in India. Stay prepared and check local alerts.</div>
-        <div class="news-item">📣 <strong>JalSuraksha:</strong> Community awareness drives planned in Assam and Bihar next month.</div>
-        <div class="news-item">🔎 <strong>Tip:</strong> Follow official IMD/NDRF channels for live warnings and evacuation orders.</div>
-      </div>
-    `;
+
   } else {
     // default welcome content (kept updated with gallery & map)
     content.innerHTML = `
