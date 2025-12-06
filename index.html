@@ -79,7 +79,6 @@
 <!-- NEW BUTTONS ADDED (preserved from earlier) -->
 <button onclick="showPage('vision')">🌅 Our Vision (Samridh Bharat)</button>
 <button onclick="showPage('data')">📊 Data & Analysis</button>
-<button onclick="showPage('innovation')">🧱 Innovation Highlights</button>
 <button onclick="showPage('quiz')">🧩 Flood Quiz</button>
 <button onclick="showPage('scaling')">🇮🇳 Scaling for Bharat</button>
 </div>
@@ -354,7 +353,7 @@ else if(page==='india'){
  Schools and offices in multiple regions, including Gurugram, Chandigarh, and Uttar Pradesh, were closed, and traffic congestion worsened due to flooded roads</li>
         </ul>
       </div>
-      <p class="small-note">The content here is for demo purposes. For live alerts, use official NDRF/IMD channels.<br>small update:latest news has been added from google as of september 2025</strong></p>
+      <p class="small-note">The content here is for demo purposes. For live alerts, use official NDRF/IMD channels.<br><strong>Small Update:latest news has been added from google as of september 2025</strong></p>
     `;
   }
 
@@ -421,7 +420,7 @@ else if(page==='help'){
       <h2>🩺 Doctor Consultation</h2>
       <p>If you're feeling unwell during or after floods, consult a certified general physician instantly for medical guidance.</p>
       <div style="margin-top:20px;padding:20px;background:#f0f7ff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);text-align:center;">
-        <p style="font-size:1.1em;color:#0a558c;font-weight:bold;">Connect with a doctor now:</p>
+        <p style="font-size:1.1em;color:#0a558c;font-weight:bold;">Connect with a doctor now:<br>for anyone whose call now button is not working type manually -->(+91) 1080888000</p>
         <a href="tel:+911080888000" style="display:inline-block;background:#0a558c;color:white;text-decoration:none;padding:12px 20px;border-radius:10px;font-weight:bold;font-size:1.1em;">📞 Call Now</a>
         <p style="margin-top:12px;font-size:0.9em;color:#555;">Available 24/7 through Apollo Hospitals helpline.</p>
       </div>
@@ -459,12 +458,12 @@ else if(page==='help'){
     }, 200);
   }
 
-  /* ---------- NEW PAGES: Vision, Data, Innovation, Quiz, Scaling, JalShakti, News ---------- */
+  /* ---------- NEW PAGES: Vision, Data, Innovation, Quiz, Scaling, JalShakti,---------- */
 
   else if(page==='vision'){
     content.innerHTML = `
       <h2>🌅 Vision — Samridh Bharat: Flood-Resilient Communities</h2>
-      <p>Our vision is to make India's flood-prone regions resilient through affordable flood-resistant housing, community preparedness, and local capacity building. This supports sustainable livelihoods, reduces disaster costs, and protects vulnerable families.</p>
+      <p>We want to make India's flood-prone areas stronger by creating inexpensive flood-resistant homes, getting communities ready, and building up local skills. This supports sustainable livelihoods, reduces disaster costs, and protects vulnerable families.</p>
       <div class="card">
         <strong>How this contributes to Samridh Bharat:</strong>
         <ul>
@@ -474,8 +473,6 @@ else if(page==='help'){
           <li>Aligns with UN SDGs — sustainable cities and climate action</li>
         </ul>
       </div>
-      <h3>Impact (example)</h3>
-      <p>Scaling flood-resilient homes can lower yearly flood relief spending, protect educational continuity, and keep small businesses operating — contributing to a prosperous India.</p>
     `;
   } else if(page==='data'){
     content.innerHTML = `
@@ -491,22 +488,7 @@ else if(page==='help'){
       </div>
     `;
     setTimeout(()=>{ renderCharts(); }, 250);
-  } else if(page==='innovation'){
-    content.innerHTML = `
-      <h2>🧱 Innovation Highlights</h2>
-      <p>What makes our Flood-Resilient Homes (FHR) project innovative:</p>
-      <div class="card">
-        <ul>
-          <li>🌊 <strong>Amphibious foundations</strong> — homes that float safely on rising water.</li>
-          <li>🪵 <strong>Local-material approach</strong> — bamboo and treated timber for affordable strength.</li>
-          <li>🔋 <strong>Energy resilient</strong> — solar + battery for essential services during floods.</li>
-          <li>📡 <strong>Community IoT alerts</strong> — low-cost water-level sensors shared via SMS/WhatsApp gateway.</li>
-          <li>♻️ <strong>Green drainage design</strong> — bioswales and restored wetlands to absorb excess water.</li>
-        </ul>
-      </div>
-      <p class="small-note">Each idea is implemented with low-cost, scalable tech and community training in mind.</p>
-    `;
-  } else if(page==='quiz'){
+   } else if(page==='quiz'){
     content.innerHTML = `
       <h2>🧩 Flood Awareness Quiz</h2>
       <p>Test your knowledge — 5 quick questions. Get a shareable result at the end.</p>
@@ -523,7 +505,7 @@ else if(page==='help'){
   } else if(page==='scaling'){
     content.innerHTML = `
       <h2>🇮🇳 Scaling Flood-Resilient Homes for Bharat</h2>
-      <p>This section outlines a practical plan to scale the JalShakti model across flood-prone regions,"<stong>YOU CAN ORDER THE JalShakti MODEL FROM THE JalShakti:order PAGE AT THE START</strong>"</p>
+      <p>This section outlines a practical plan to scale the JalShakti model across flood-prone regions,"<strong>YOU CAN ORDER THE JalShakti MODEL FROM THE JalShakti:order PAGE AT THE START</strong>"</p>
       <div class="card">
         <strong>Key elements:</strong>
         <ul>
