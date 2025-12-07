@@ -209,7 +209,7 @@ async function botReply(userText) {
       return;
     }
   }
-  appendMessage('bot', "🤔 Thinking...");
+  appendMessage('bot', "🤔🤔💭💭 Thinking...");
   try {
     const res = await fetch("https://mango-backend1-1.onrender.com/mango", {
       method: "POST",
@@ -219,7 +219,7 @@ async function botReply(userText) {
     const data = await res.json();
     reply = data.reply || "I couldn’t get an answer right now. Try again later.";
   } catch (err) {
-    reply = "⚠️ Error contacting Mango AI server. Please check your connection.";
+    reply = "⚠️ Error contacting Mango AI. Please check your connection.";
     console.error(err);
   }
   appendMessage('bot', reply);
@@ -240,7 +240,7 @@ function showPage(page){
 
     <div class="precaution-grid">
       <div class="precaution-card">
-        <h3>Move to Higher Ground</h3>
+        <h3>Move to Higher Grounds</h3>
         <p class="small-note">If water levels are rising, move to the roof or an upper floor and alert neighbors.</p>
       </div>
 
@@ -293,7 +293,7 @@ function showPage(page){
 
     <div class="precaution-grid">
       <div class="precaution-card">
-        <h3>Move to Higher Ground</h3>
+        <h3>Move to Higher Grounds</h3>
         <p class="small-note">If water levels are rising, move to the roof or an upper floor and alert neighbors.</p>
       </div>
 
@@ -347,10 +347,10 @@ else if(page==='india'){
       <div class="card">
         <strong>Key trends:</strong>
         <ul>
-          <li> Punjab experienced its worst floods in recent history, with 30 fatalities reported and over 354,000 people affected across all 23 districts, which were declared flood-hit</li>
-          <li>In Jammu and Kashmir, more than 50 people died in the past fortnight due to heavy rains and flash floods, with the Jammu-Srinagar National Highway closed for eight consecutive days due to landslides and road washouts</li>
-          <li>Delhi and the National Capital Region (NCR) also faced severe waterlogging, with the Yamuna River breaching its danger mark and floodwaters entering homes.
- Schools and offices in multiple regions, including Gurugram, Chandigarh, and Uttar Pradesh, were closed, and traffic congestion worsened due to flooded roads</li>
+          <li> <b>Punjab experienced its worst floods in recent history, with 30 fatalities reported and over 354,000 people affected across all 23 districts, which were declared flood-hit</b></li>
+          <li>In Jammu and Kashmir, <b>more than 50 people died in the past fortnight due to heavy rains and flash floods</b>, with the Jammu-Srinagar National Highway closed for eight consecutive days due to landslides and road washouts</li>
+          <li><b>Delhi and the National Capital Region (NCR) also faced severe waterlogging, with the Yamuna River breaching its danger mark and floodwaters entering homes.
+ Schools and offices in multiple regions, including Gurugram, Chandigarh, and Uttar Pradesh, were closed, and traffic congestion worsened due to flooded roads</b></li>
         </ul>
       </div>
       <p class="small-note">The content here is for demo purposes. For live alerts, use official NDRF/IMD channels.<br><strong>Small Update:latest news has been added from google as of september 2025</strong></p>
@@ -437,7 +437,7 @@ else if(page==='help'){
         <div style="display:flex;gap:10px;margin-top:10px;">
           <button id="postUpdateBtn" style="background:#0a558c;color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;">Post Update</button>
           <button id="refreshUpdatesBtn" style="background:#69c3b3;color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;">Refresh</button>
-          <button id="offerHelpToggle" style="background:#0a558c;color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;">Offer Help</button>
+        
         </div>
         <div id="offerHelpFields" style="display:none;margin-top:10px;">
           <input id="offerType" type="text" placeholder="What can you offer? (boat / food / shelter)" style="width:100%;padding:10px;margin-top:8px;border-radius:6px;border:1px solid #ccc;">
@@ -529,12 +529,26 @@ else if(page==='help'){
           <h3>Key features</h3>
           <ul>
          
-            <li>It is portable and modular and is also easy to deploy in flooded areas</li>
-            <li>It also produces enough power for lights, charging phones and running small lamps</li>
-            <li>It can charge phones,power banks and stoves for cooking food</li>
-            <li>Easy and simple maintainance ,Local parts are also used</li>
+            <li><u>It is portable and modular and is also easy to deploy in flooded areas</u></li>
+            <li><u>It also produces enough power for lights, charging phones and running small lamps</u></li>
+            <li><u>It can charge phones,power banks and stoves for cooking food</u></li>
+            <li><u>Easy and simple maintainance ,Local parts are also used</u></li>
           </ul>
-          <p style="margin-top:12px;"><strong>Order prototype:</strong> <button onclick="alert('Thanks! for ordering we have received your order request please wait for some time.')" style="background:#0a558c;color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;">Order JalShakti</button></p>
+         <p style="margin-top:16px; font-size:18px;">
+  <strong>Order prototype:</strong>
+  <button 
+    onclick="alert('Thanks! We have received your order request. Please wait for some time.')"
+    style="background:#0a558c; 
+           color:white; 
+           border:none; 
+           padding:14px 20px; 
+           border-radius:10px; 
+           cursor:pointer; 
+           font-size:18px;">
+    Order JalShakti
+  </button>
+</p>
+
         </div>
       </div>
       <p class="small-note" style="margin-top:12px;"><strong>(This is a prototype listing for demo purposes.)</strong></p>
