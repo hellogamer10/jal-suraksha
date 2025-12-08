@@ -754,7 +754,7 @@ function startQuiz(){
       resEl.style.display='block';
       resEl.innerHTML = `<h3>Your Score: ${score} / ${QUIZ_QUESTIONS.length}</h3><p class="small-note">Share your result with friends to spread awareness!</p><button id="shareQuiz" style="background:#69c3b3;color:white;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;">Share</button>`;
       document.getElementById('shareQuiz').onclick = ()=> {
-        const text = `I scored ${score}/${QUIZ_QUESTIONS.length} on the Flood Awareness Quiz! Learn more at FHR project.`;
+        const text = `I scored ${score}/${QUIZ_QUESTIONS.length} on the Flood Awareness Quiz! Learn more at Jal-Suraksha project.<strong>on (hellogamer10.github.io/jal-suraksha)</strong>`;
         if(navigator.share){ navigator.share({title:'Flood Quiz Result', text}); }
         else { prompt('Copy and share:', text); }
       };
