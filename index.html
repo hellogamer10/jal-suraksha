@@ -39,6 +39,14 @@
   .news-list { margin-top:18px; display:flex; flex-direction:column; gap:12px; }
   .news-item { background:#fffdf5; padding:12px; border-left:4px solid #0a558c; border-radius:8px; }
   @media (max-width:768px){main{padding:25px;}header h1{font-size:2.3em;}}
+  #pageContent {
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  }
+  #pageContent.loading {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
   marquee{background:#0a558c;color:white;padding:10px 0;font-weight:bold;}
 </style>
 <meta charset="utf-8"/>
@@ -62,8 +70,8 @@
 <marquee>Currently no floods in India</marquee>
 
 <main id="mainContent">
-<h2>Welcome</h2>
-<p>Here you can explore all about flood and flood resilient homes (ask our Mango bot if any queries).</p>
+<h2 style="text-align: center; font-size: 4em; font-weight: 900; border-bottom: none; padding-bottom: 0; margin-bottom: 10px;"><u>Welcome</u></h2>
+<p style="text-align: center;">Here you can explore all about flood and flood resilient homes (ask our Mango bot if any queries).</p>
 
 <div class="nav-buttons">
 <!-- Replaced Consequences button with JalShakti and added News button. Kept all other buttons exactly as they were. -->
@@ -110,7 +118,7 @@
 <div class="footer" style="font-size: 20px;">© made by Namish Bindal &amp; Aniket Gupta, Class 8-D</div>
 
 <!-- Chatbox (Mango) kept exactly as original -->
-<button id="chatButton">💬</button>
+<button id="chatButton">🥭</button>
 <div id="chatBox">
   <div id="chatHeader">Ask Mango</div>
   <div id="chatMessages"><div class="msg bot">👋 Hi! I'm Mango – your flood safety assistant. How can I help you today?</div></div>
@@ -229,103 +237,113 @@ sendBtn.onclick=()=>{ const text=chatInput.value.trim(); if(!text)return; append
 
 /* ---------- Page switching + original content preserved where possible ---------- */
 
-function showPage(page){
+let animationTimeout; // To prevent multiple animations running at once
+
+function typeOut(container, html) {
+  clearTimeout(animationTimeout);
+
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+
+  const wordsToReveal = [];
+
+  // Recursively traverse nodes to find text and wrap words in spans
+  function processNode(node) {
+    if (node.nodeType === 3 && node.textContent.trim().length > 0) { // It's a text node with content
+      const fragment = document.createDocumentFragment();
+      const text = node.textContent;
+      // Split by spaces to get words, but keep spaces
+      const parts = text.split(/(\s+)/); 
+
+      parts.forEach(part => {
+        if (part.trim().length > 0) {
+          const span = document.createElement('span');
+          span.textContent = part;
+          span.style.opacity = '0';
+          span.style.transition = 'opacity 0.2s ease-in-out';
+          fragment.appendChild(span);
+          wordsToReveal.push(span);
+        } else {
+          // It's just whitespace, append as a text node
+          fragment.appendChild(document.createTextNode(part));
+        }
+      });
+      node.parentNode.replaceChild(fragment, node);
+    } else if (node.nodeType === 1) { // It's an element node
+      // Process children of this element
+      Array.from(node.childNodes).forEach(processNode);
+    }
+  }
+
+  processNode(tempDiv);
+  container.innerHTML = '';
+  while (tempDiv.firstChild) {
+    container.appendChild(tempDiv.firstChild);
+  }
+
+  let i = 0;
+  function revealNextWord() {
+    if (i < wordsToReveal.length) {
+      wordsToReveal[i].style.opacity = '1';
+      i++;
+      animationTimeout = setTimeout(revealNextWord, 40); // Speed of word reveal
+    }
+  }
+  revealNextWord();
+}
+
+function showPage(page) {
   const content=document.getElementById('pageContent');
   if(!content) return;
 
- if(page==='precautions'){
-  content.innerHTML=`
+  // 1. Start the "slide out" animation
+  content.classList.add('loading');
+
+  // 2. Wait for the slide-out to finish, then update content
+  setTimeout(() => {
+    _updatePageContent(page, content);
+  }, 300); // This should match the CSS transition duration
+}
+
+function _updatePageContent(page, content) {
+  let newHtml = '';
+
+  if(page==='precautions'){
+  newHtml=`
     <h2>Precautions During Flood</h2>
     <p>When floods are expected, follow these essential precautions to ensure safety.</p>
-
-    <div class="precaution-grid">
-      <div class="precaution-card">
-        <h3>Move to Higher Grounds</h3>
-        <p class="small-note">If water levels are rising, move to the roof or an upper floor and alert neighbors.</p>
-      </div>
-
-      <div class="precaution-card">
-        <h3>Keep Emergency Kits Ready</h3>
-        <p class="small-note">Include water, non-perishable food, flashlight, batteries, medicines, and important documents.</p>
-      </div>
-
-      <div class="precaution-card">
-        <h3>Avoid Walking/Driving Through Floodwater</h3>
-        <p class="small-note">Just 15 cm of fast-moving water can knock a person down; 30 cm can move a car.</p>
-      </div>
-
-      <div class="precaution-card">
-        <h3>Unplug Electrical Devices</h3>
-        <p class="small-note">Turn off the main power supply before water reaches electrical outlets. Avoid contact with electrical equipment if wet.</p>
-      </div>
-    </div>
-
-    <div style="display:flex;justify-content:center;margin-top:25px;">
-      <img 
-        src="https://i.ibb.co/M5D8MwPp/image.png" 
-        alt="Flood safety illustration" 
-        style="width:50%;max-width:600px;height:auto;border-radius:12px;box-shadow:0 3px 10px rgba(0,0,0,0.15);"
-      >
-    </div>
-
-    <p></p>
-  `;
-}
- if(page==='plan')
-    content.innerHTML=`
-      <h2>🏠 Flood Resistant House</h2>
-      <p>Flood resistant houses combine modern architecture with safety engineering, They are built to float or stand above flood levels and these designs focus on sustainability, safety, and affordability.</p>
-      <ul>
-        <li>🗼 Elevated on sturdy and reinforced platforms</li>
-        <li>🪵 Use of waterproof materials and hydrophobic coatings</li>
-        <li>🔋 Solar panels and rainwater harvesting systems</li>
-        <li>🌿 Green surroundings that improve soil drainage</li>
-      </ul>
-      <div style="text-align:right;margin-top:20px;">
-        <img src="https://i.postimg.cc/6QdQpYg5/flood4.jpg" alt="flood resistant house example" />
-        <p style="font-size:0.9em;color:#555;margin-top:5px;">Example of elevated flood-resistant architecture</p>
-      </div>`;
-
- if(page==='precautions'){
-  content.innerHTML=`
-    <h2>Precautions During Flood</h2>
-    <p>When floods are expected, follow these essential precautions to ensure safety. Each item below has a matching image for quick reference:</p>
-
-    <div class="precaution-grid">
-      <div class="precaution-card">
-        <h3>Move to Higher Grounds</h3>
-        <p class="small-note">If water levels are rising, move to the roof or an upper floor and alert neighbors.</p>
-      </div>
-
-      <div class="precaution-card">
-        <h3>Keep Emergency Kits Ready</h3>
-        <p class="small-note">Include water, non-perishable food, flashlight, batteries, medicines, and important documents.</p>
-      </div>
-
-      <div class="precaution-card">
-        <h3>Avoid Walking/Driving Through Floodwater</h3>
-        <p class="small-note">Just 15 cm of fast-moving water can knock a person down; 30 cm can move a car.</p>
-      </div>
-
-      <!-- 👇 The last box and image side by side -->
-      <div class="precaution-card" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;grid-column:1/-1;">
-        <div style="flex:1;min-width:260px;">
+    
+    <div style="display:flex; flex-wrap:wrap; gap:25px; align-items:center; margin-top:25px;">
+      <div class="precaution-grid" style="flex:1.5; min-width:300px; margin-top:0;">
+        <div class="precaution-card">
+          <h3>Move to Higher Grounds</h3>
+          <p class="small-note">If water levels are rising, move to the roof or an upper floor and alert neighbors.</p>
+        </div>
+        <div class="precaution-card">
+          <h3>Keep Emergency Kits Ready</h3>
+          <p class="small-note">Include water, non-perishable food, flashlight, batteries, medicines, and important documents.</p>
+        </div>
+        <div class="precaution-card">
+          <h3>Avoid Walking/Driving Through Floodwater</h3>
+          <p class="small-note">Just 15 cm of fast-moving water can knock a person down; 30 cm can move a car.</p>
+        </div>
+        <div class="precaution-card">
           <h3>Unplug Electrical Devices</h3>
           <p class="small-note">Turn off the main power supply before water reaches electrical outlets. Avoid contact with electrical equipment if wet.</p>
         </div>
-        <div style="flex:1;min-width:260px;text-align:center;">
-          <img 
-            src="https://i.ibb.co/M5D8MwPp/image.png" 
-            alt="Flood safety illustration" 
-            style="width:100%;max-width:500px;height:auto;border-radius:12px;box-shadow:0 3px 10px rgba(0,0,0,0.15);"
-          >
-        </div>
+      </div>
+      <div style="flex:1; min-width:280px; text-align:center;">
+        <img src="https://i.ibb.co/M5D8MwPp/image.png" alt="Flood safety illustration" style="max-width:400px; max-height:180px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.15);">
       </div>
     </div>
+    <div style="text-align:center; margin-top:25px;">
+      <button class="pop-quiz-btn" data-quiz="precautions" style="background:#69c3b3; color:white; padding:10px 18px; border-radius:10px; font-weight:bold; border:none; cursor:pointer; font-size:1em;">
+        🧠 Pop Quiz!
+      </button>
+    </div>
   `;
-
   } else if(page==='plan'){
-    content.innerHTML=`
+    newHtml=`
       <h2>🏠 Flood Resistant House</h2>
       <p>Flood-resistant houses combine modern architecture with safety engineering. Built to float or stand above flood levels, these designs focus on sustainability, safety, and affordability.</p>
       <ul>
@@ -334,14 +352,19 @@ function showPage(page){
         <li>🔋 Solar panels and rainwater harvesting systems</li>
         <li>🌿 Green surroundings that improve soil drainage</li>
       </ul>
-      <div style="text-align:right;margin-top:20px;">
-        <img src="https://i.postimg.cc/6QdQpYg5/flood4.jpg" alt="flood resistant house example" />
+      <div style="text-align:center;margin-top:20px;">
+        <img src="https://i.postimg.cc/6QdQpYg5/flood4.jpg" alt="flood resistant house example" style="max-height:300px;" />
         <p style="font-size:0.9em;color:#555;margin-top:5px;">Example of elevated flood-resistant architecture</p>
       </div>`;
+    newHtml += `
+      <div style="text-align:center; margin-top:20px;">
+        <button class="pop-quiz-btn" data-quiz="house" style="background:#69c3b3; color:white; padding:10px 18px; border-radius:10px; font-weight:bold; border:none; cursor:pointer; font-size:1em;">🧠 Pop Quiz!</button>
+      </div>
+    `;
   }
 
-else if(page==='india'){
-    content.innerHTML = `
+  else if(page==='india'){
+    newHtml = `
       <h2>🇮🇳 Recent Indian Flood Updates (2025)</h2>
       <p>In September 2025, severe flooding and landslides affected several northern Indian states, including Punjab, Jammu and Kashmir, Uttarakhand, Delhi, and Himachal Pradesh, following prolonged and intense rainfall. Stay updated through official government channels, NDRF alerts, and local disaster management authorities for real-time information.</p>
       <div class="card">
@@ -354,11 +377,16 @@ else if(page==='india'){
         </ul>
       </div>
       <p class="small-note">The content here is for demo purposes. For live alerts, use official NDRF/IMD channels.<br><strong>Small Update:latest news has been added from google as of september 2025</strong></p>
+      <div style="text-align:center; margin-top:20px;">
+        <button class="pop-quiz-btn" data-quiz="india" style="background:#69c3b3; color:white; padding:10px 18px; border-radius:10px; font-weight:bold; border:none; cursor:pointer; font-size:1em;">
+          🧠 Pop Quiz!
+        </button>
+      </div>
     `;
   }
 
-else if(page==='help'){
-    content.innerHTML = `
+  else if(page==='help'){
+    newHtml = `
       <h2>📞 Call for Help</h2>
       <p>If you are in an emergency situation during floods, please fill in your details below. Our system will alert the nearest rescue services.<strong>!DO NOT TAKE SERIOUSLY WE DO NOT HAVE ANY TEAM!</strong></p>
       <div style="margin-top:20px;padding:20px;background:#f0f7ff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
@@ -372,6 +400,10 @@ else if(page==='help'){
       </div>
       <p id="helpMessage" style="margin-top:20px;font-size:1.2em;color:#088a0b;font-weight:bold;display:none;">🚑 Help is on the way!</p>
     `;
+    // Use animation and then slide back in
+    typeOut(content, newHtml);
+    content.classList.remove('loading');
+
     setTimeout(()=> {
       const callBtn = document.getElementById('callHelpBtn');
       if(callBtn){
@@ -388,8 +420,9 @@ else if(page==='help'){
         };
       }
     }, 150);
-  } else if(page==='emergency'){
-    content.innerHTML = `
+    return; // Return early as we've handled content update and event binding
+  } else if(page==='emergency') {
+    newHtml = `
       <h2>🚑 Emergency Numbers</h2>
       <p>If you or someone near you is in danger or needs urgent medical, rescue, or disaster help, use the official helpline numbers below:</p>
       <h3>📞 National Emergency Services</h3>
@@ -415,8 +448,8 @@ else if(page==='help'){
       </ul>
       <p style="margin-top:20px;font-style:italic;color:#555;">💡 Save these numbers on your phone before a flood emergency occurs.</p>
     `;
-  } else if(page==='doctor'){
-    content.innerHTML = `
+  } else if(page==='doctor') {
+    newHtml = `
       <h2>🩺 Doctor Consultation</h2>
       <p>If you're feeling unwell during or after floods, consult a certified general physician instantly for medical guidance.</p>
       <div style="margin-top:20px;padding:20px;background:#f0f7ff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);text-align:center;">
@@ -425,9 +458,9 @@ else if(page==='help'){
         <p style="margin-top:12px;font-size:0.9em;color:#555;">Available 24/7 through Apollo Hospitals helpline.</p>
       </div>
     `;
-  } else if(page==='live' || page==='liveupdates' || page==='live-updates'){
+  } else if(page==='live' || page==='liveupdates' || page==='live-updates') {
     // open live updates - preserved Firebase usage
-    content.innerHTML = `
+    newHtml = `
       <h2>📢 Live Community Updates</h2>
       <p>Share real-time updates — flood level, help available, road closures, or safe spots. Posts are shared across all users.</p>
       <div style="margin:20px 0;padding:20px;background:#f0f7ff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
@@ -446,6 +479,10 @@ else if(page==='help'){
       </div>
       <div id="updatesList" style="margin-top:25px;"></div>
     `;
+    // Use animation and then slide back in
+    typeOut(content, newHtml);
+    content.classList.remove('loading');
+
     // wire up after short delay to allow DOM
     setTimeout(()=> {
       document.getElementById('postUpdateBtn').onclick = postUpdateToFirebase;
@@ -456,12 +493,13 @@ else if(page==='help'){
       };
       db.ref('updates').once('value').then(renderUpdates);
     }, 200);
+    return; // Return early
   }
 
   /* ---------- NEW PAGES: Vision, Data, Innovation, Quiz, Scaling, JalShakti,---------- */
 
-  else if(page==='vision'){
-    content.innerHTML = `
+  else if(page==='vision') {
+    newHtml = `
       <h2>🌅 Vision — Samridh Bharat: Flood-Resilient Communities</h2>
       <p>We want to make India's flood-prone areas stronger by creating inexpensive flood-resistant homes, getting communities ready, and building up local skills. This supports sustainable livelihoods, reduces disaster costs, and protects vulnerable families.</p>
       <div class="card">
@@ -474,8 +512,8 @@ else if(page==='help'){
         </ul>
       </div>
     `;
-  } else if(page==='data'){
-    content.innerHTML = `
+  } else if(page==='data') {
+    newHtml = `
       <h2>📊 Data & Analysis</h2>
       <p>Below are sample visualisations to demonstrate how data can guide flood planning. (Mock/demo data.)</p>
       <div class="card">
@@ -487,9 +525,13 @@ else if(page==='help'){
         <p class="small-note">Top 5 affected states by incidents (mock data).</p>
       </div>
     `;
+    // Use animation and then slide back in
+    typeOut(content, newHtml);
+    content.classList.remove('loading');
     setTimeout(()=>{ renderCharts(); }, 250);
-   } else if(page==='quiz'){
-    content.innerHTML = `
+    return; // Return early
+  } else if(page==='quiz') {
+    newHtml = `
       <h2>🧩 Flood Awareness Quiz</h2>
       <p>Test your knowledge — 5 quick questions. Get a shareable result at the end.</p>
       <div class="card" id="quizCard">
@@ -501,9 +543,13 @@ else if(page==='help'){
         <div id="quizResult" style="display:none;margin-top:12px;"></div>
       </div>
     `;
+    // Use animation and then slide back in
+    typeOut(content, newHtml);
+    content.classList.remove('loading');
     setTimeout(()=>{ startQuiz(); }, 200);
-  } else if(page==='scaling'){
-    content.innerHTML = `
+    return; // Return early
+  } else if(page==='scaling') {
+    newHtml = `
       <h2>🇮🇳 Scaling Flood-Resilient Homes for Bharat</h2>
       <p>This section outlines a practical plan to scale the JalShakti model across flood-prone regions,"<strong>YOU CAN ORDER THE JalShakti MODEL FROM THE JalShakti:order PAGE AT THE START</strong>"</p>
       <div class="card">
@@ -517,8 +563,8 @@ else if(page==='help'){
       </div>
       
     `;
-  } else if(page==='jalshakti'){
-    content.innerHTML = `
+  } else if(page==='jalshakti') {
+    newHtml = `
       <h2>🔋 JalShakti: Order your JalShakti today</h2>
       <p>JalShakti is a prototype micro-hydro generator device that uses the motion of floodwater and small streams to produce emergency electricity for essential and daily tasks during a flood.</p>
       <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:18px;">
@@ -556,7 +602,7 @@ else if(page==='help'){
 
   } else {
     // default welcome content (kept updated with gallery & map)
-    content.innerHTML = `
+    newHtml = `
       <div class="flood-resistant houses">
         <img alt="Vadodara Flood 2019" src="https://i.ibb.co/6RyHzVGL/Screenshot-2025-11-01-123101.png"/>
       
@@ -564,9 +610,12 @@ else if(page==='help'){
       <div class="map-img">
       
     `;
-  }
+  }  
+  // Apply the animation for all pages that don't have special logic
+  // and then trigger the slide-in
+  typeOut(content, newHtml);
+  content.classList.remove('loading');
 }
-
 /* ---------- Firebase config + Live updates rendering (kept + small improvement) ---------- */
 
 const firebaseConfig = {
@@ -726,11 +775,11 @@ function renderCharts(){
 /* ---------- Quiz logic ---------- */
 
 const QUIZ_QUESTIONS = [
-  {q: "What's the safest action during fast-moving flood water?", options:["Try to swim across","Move to higher ground","Drive slowly through it","Wait at the same spot"], a:1},
-  {q: "What should NOT be used after flood water settles down?", options:["Use boiled water","Eat canned food","Use wet electrical appliances","Dry and disinfect belongings"], a:2},
-  {q: "Which local resource helps absorb excess water and reduce flooding?", options:["Concrete pavement","Bioswales and wetlands","More parking lots","Paved canals"], a:1},
-  {q: "A good emergency kit should include:", options:["Batteries, torch, water, first-aid","Only money","Heavy furniture","Gas stove with open flame"], a:0},
-  {q: "Who should you contact for immediate rescue in India?", options:["112","100","911","122"], a:0}
+  {q: "What's the safest action during fast-moving flood water?", options:["Attempt to cross on foot","Move to higher ground immediately","Stay in your vehicle","Seek shelter in a basement"], a:1},
+  {q: "What should NOT be used after flood water settles down?", options:["Boil tap water before drinking","Eat canned food with intact seals","Use wet electrical appliances","Dry and disinfect all affected items"], a:2},
+  {q: "Which local resource helps absorb excess water and reduce flooding?", options:["Extensive concrete surfaces","Natural wetlands and green spaces","Large paved parking areas","Straightened river channels"], a:1},
+  {q: "A good emergency kit should include:", options:["Non-perishable food, water, first-aid, flashlight","Only personal documents and jewelry","Large, heavy blankets and pillows","A portable TV and gaming console"], a:0},
+  {q: "Who should you contact for immediate rescue in India?", options:["112 (All-in-one emergency)","100 (Police only)","911 (International emergency)","108 (Ambulance only)"], a:0}
 ];
 
 function startQuiz(){
@@ -762,6 +811,29 @@ function startQuiz(){
   };
 }
 
+/* ---------- Pop Quiz Logic ---------- */
+const popQuizzes = {
+  precautions: {
+    info: "Just 15 cm (6 inches) of fast-moving water can knock a person down.",
+    question: "How much fast-moving water does it take to move a standard car?\n\n(Enter a number in cm)",
+    hint: "It's double the amount that can knock a person down.",
+    answer: "30"
+  },
+  house: {
+    info: "Elevating a house on stilts or a solid foundation is a primary method of flood-proofing.",
+    question: "What is another key feature of a flood-resistant house design that deals with water contact?",
+    hint: "Think about making the walls and floors 'water-resistant'.",
+    answer: "waterproof"
+  },
+  india: {
+    info: "The National Disaster Response Force (NDRF) is India's specialized force for handling disaster situations.",
+    question: "What is India's all-in-one emergency helpline number?",
+    hint: "It's three digits.",
+    answer: "112"
+  }
+};
+
+
 /* ---------- Small helpers ---------- */
 
 document.addEventListener('click', (e)=>{
@@ -769,6 +841,52 @@ document.addEventListener('click', (e)=>{
     const q=document.getElementById('trainQ').value.trim(); const a=document.getElementById('trainA').value.trim();
     if(!q||!a) return alert("Please fill both fields.");
     memory[q]=a; saveMemory(); alert(`✅ mango learned: \"${q}\"`); document.getElementById('trainQ').value=''; document.getElementById('trainA').value='';
+  }
+  if(e.target && e.target.classList.contains('pop-quiz-btn')){
+    const button = e.target;
+    // Prevent multiple quizzes at once
+    if(document.querySelector('.pop-quiz-container')) {
+      document.querySelector('.pop-quiz-container').remove();
+    }
+    if(button.classList.contains('active')) {
+      button.classList.remove('active');
+      return;
+    }
+    document.querySelectorAll('.pop-quiz-btn.active').forEach(b => b.classList.remove('active'));
+    button.classList.add('active');
+
+    const quizType = e.target.getAttribute('data-quiz');
+    const quiz = popQuizzes[quizType];
+    if(quiz){
+      const quizContainer = document.createElement('div');
+      quizContainer.className = 'card pop-quiz-container';
+      quizContainer.style.marginTop = '20px';
+      quizContainer.innerHTML = `
+        <p style="font-size:0.9em;color:#555;margin:0 0 10px 0;">
+          <strong style="color:#0a558c;">💡 Did you know?</strong><br>${quiz.info}
+        </p>
+        <h4 style="margin:10px 0;">❓ Pop Quiz Question:</h4>
+        <p style="margin:0;">${quiz.question.replace(/\n/g, '<br>')}</p>
+        <p class="small-note" style="margin-top:4px;"><em>Hint: ${quiz.hint}</em></p>
+        <div style="display:flex; gap:10px; margin-top:15px;">
+          <input type="text" class="pop-quiz-input" placeholder="Your answer..." style="flex:1;padding:8px;border:1px solid #ccc;border-radius:6px;">
+          <button class="pop-quiz-submit" style="background:#0a558c;color:white;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;">Submit</button>
+        </div>
+        <div class="pop-quiz-result" style="margin-top:12px;font-weight:bold;"></div>
+      `;
+      // Insert the quiz card right after the button's parent div
+      button.parentElement.insertAdjacentElement('afterend', quizContainer);
+
+      quizContainer.querySelector('.pop-quiz-submit').onclick = () => {
+        const userAnswer = quizContainer.querySelector('.pop-quiz-input').value;
+        const resultDiv = quizContainer.querySelector('.pop-quiz-result');
+        if (userAnswer && userAnswer.toLowerCase().includes(quiz.answer.toLowerCase())) {
+          resultDiv.innerHTML = `<span style="color:#088a0b;">✅ Correct! Great job!</span>`;
+        } else {
+          resultDiv.innerHTML = `<span style="color:#dc3545;">❌ Not quite. The correct answer is: ${quiz.answer}.</span><br><small>Keep learning to stay safe!</small>`;
+        }
+      };
+    }
   }
 });
 </script>
