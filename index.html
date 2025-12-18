@@ -74,7 +74,14 @@
 <p style="text-align: center;">Here you can explore all about flood and flood resilient homes (ask our Mango bot if any queries).</p>
 
 <div class="nav-buttons">
-<!-- Replaced Consequences button with JalShakti and added News button. Kept all other buttons exactly as they were. -->
+
+
+
+
+
+
+    
+<button onclick="showPage('flood')"> 🌊What are floods</button>
 <button onclick="showPage('jalshakti')">🔌 JalShakti: Order</button>
 <button onclick="showPage('precautions')">🛟 Precautions During Flood</button>
 <button onclick="showPage('plan')">🏠 Flood Resistant House</button>
@@ -114,8 +121,6 @@
 
 </div>
 </main>
-
-<div class="footer" style="font-size: 20px;">© made by Namish Bindal &amp; Aniket Gupta, Class 8-D</div>
 
 <!-- Chatbox (Mango) kept exactly as original -->
 <button id="chatButton">🥭</button>
@@ -307,8 +312,45 @@ function showPage(page) {
 
 function _updatePageContent(page, content) {
   let newHtml = '';
+  
+  
+  if(page==='flood'){
+  newHtml=`
+    <h2>Floods</h2>
+    <p>A flood is a natural disaster that occurs when water overflows onto land that is normally dry. Floods usually happen due to heavy rainfall, overflowing rivers, melting snow, dam failure, or coastal storms. When the ground cannot absorb excess water, it spreads rapidly into nearby areas, damaging homes, crops, roads, and infrastructure. Floods also pose serious risks to human life, animals, and the environment.</p>
 
-  if(page==='precautions'){
+    <div style="display:flex; flex-wrap:wrap; gap:25px; align-items:center; margin-top:25px;">
+      <div class="precaution-grid" style="flex:1.5; min-width:300px; margin-top:0;">
+        <div class="precaution-card">
+          <h3>What Are Floods</h3>
+          <p class="small-note">Floods occur when water levels rise beyond the capacity of rivers, lakes, or drainage systems, causing water to spread over land. They can develop slowly over days or suddenly within hours, depending on weather conditions and geography.</p>
+        </div>
+        <div class="precaution-card">
+          <h3>Flash Floods</h3>
+          <p class="small-note">Flash floods are extremely rapid floods caused by intense rainfall, cloudbursts, or sudden release of water from dams. They develop within minutes or hours and are highly dangerous because they provide little or no warning.</p>
+        </div>
+        <div class="precaution-card">
+          <h3>Causes of Floods</h3>
+          <p class="small-note">Common causes include prolonged heavy rain, blocked drainage systems, river overflow, deforestation, urbanization, and cyclones. In hilly regions, flash floods are often triggered by cloudbursts.</p>
+        </div>
+        <div class="precaution-card">
+          <h3>Effects of Floods</h3>
+          <p class="small-note">Floods can lead to loss of life, destruction of property, spread of waterborne diseases, displacement of people, and long-term economic damage.</p>
+        </div>
+      </div>
+      <div style="flex:1; min-width:280px; text-align:center;">
+        <img src="https://i.ibb.co/DP6F09NZ/Screenshot-2025-12-18-211359.png" alt="Flood illustration" style="max-width:100%; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.15);">
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:25px;">
+      <button class="pop-quiz-btn" data-quiz="flood" style="background:#69c3b3; color:white; padding:10px 18px; border-radius:10px; font-weight:bold; border:none; cursor:pointer; font-size:1em;">
+        🧠 Pop Quiz!
+      </button>
+    </div>
+  `;
+}
+
+ else if(page==='precautions'){
   newHtml=`
     <h2>Precautions During Flood</h2>
     <p>When floods are expected, follow these essential precautions to ensure safety.</p>
@@ -616,6 +658,7 @@ function _updatePageContent(page, content) {
   typeOut(content, newHtml);
   content.classList.remove('loading');
 }
+
 /* ---------- Firebase config + Live updates rendering (kept + small improvement) ---------- */
 
 const firebaseConfig = {
@@ -813,6 +856,12 @@ function startQuiz(){
 
 /* ---------- Pop Quiz Logic ---------- */
 const popQuizzes = {
+  flood: {
+    info: "Flash floods are the most dangerous kind of floods because they combine the destructive power of a flood with incredible speed.",
+    question: "What type of flood develops within minutes or hours, often with little warning?",
+    hint: "It happens in a 'flash'.",
+    answer: "flash flood"
+  },
   precautions: {
     info: "Just 15 cm (6 inches) of fast-moving water can knock a person down.",
     question: "How much fast-moving water does it take to move a standard car?\n\n(Enter a number in cm)",
