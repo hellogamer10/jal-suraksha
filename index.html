@@ -1,944 +1,1103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<style>
-  img { max-width: 100%; height: auto; border-radius: 10px; }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: "Segoe UI", "Georgia", serif;
-    background: linear-gradient(to bottom, #cfe3f6 0%, #e9f3ff 50%, #ffffff 100%);
-    color: #1e324a;
-    min-height: 100vh;
-  }
-  header { text-align: center; padding: 60px 20px 40px 20px; }
-  header h1 { font-size: 3em; background: linear-gradient(90deg, #0a558c, #69c3b3, #0a558c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  main { max-width: 1100px; margin: 40px auto; border-radius: 18px; padding: 45px; background: rgba(255,255,255,0.97); box-shadow: 0 4px 20px rgba(60,90,130,0.15); }
-  h2 { font-size: 1.8em; color: #23476a; border-bottom: 2px solid #d6e4f7; padding-bottom: 8px; margin-top: 40px; }
-  .nav-buttons { display:flex; flex-wrap:wrap; justify-content:center; margin-top:30px; gap:15px; }
-  .nav-buttons button { background:#0a558c; color:white; padding:14px 22px; border-radius:12px; text-decoration:none; font-weight:bold; border:none; cursor:pointer; transition:0.3s; }
-  .nav-buttons button:hover { background:#69c3b3; transform:scale(1.05); }
-  .footer { text-align: center; color: #2d4764; margin: 40px auto 25px auto; font-size: 1.05em; }
-  #chatButton {position:fixed;bottom:20px;right:20px;background:#0a558c;color:white;border:none;border-radius:50%;width:55px;height:55px;font-size:22px;box-shadow:0 3px 10px rgba(0,0,0,0.3);cursor:pointer;}
-  #chatBox {position:fixed;bottom:80px;right:20px;width:300px;max-height:420px;background:#ffffff;border-radius:12px;box-shadow:0 3px 10px rgba(0,0,0,0.25);display:none;flex-direction:column;overflow:hidden;}
-  #chatHeader {background:#0a558c;color:white;padding:10px;font-weight:bold;}
-  #chatMessages {flex:1;padding:10px;overflow-y:auto;font-size:14px;}
-  .msg {margin:6px 0;}
-  .user {text-align:right;color:#0a558c;}
-  .bot {text-align:left;color:#1e324a;}
-  #chatInputArea {display:flex;border-top:1px solid #ccc;}
-  #chatInput {flex:1;padding:8px;border:none;outline:none;}
-  #sendBtn {background:#0a558c;color:white;border:none;padding:8px 14px;cursor:pointer;}
-  #live-toast{position:fixed;bottom:24px;right:24px;background:#0a558c;color:white;padding:10px 14px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.2);display:none;z-index:2000;}
-  .small-note { font-size:0.95em; color:#456; margin-top:8px; }
-  .card { background:white;border-radius:12px;padding:14px;box-shadow:0 2px 10px rgba(20,40,80,0.06); margin:12px 0; }
-  .flood-gallery { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:18px; margin-top:18px; }
-  .map-img { margin-top:18px; }
-  .precaution-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:18px; margin-top:18px; }
-  .precaution-card { background:#f8fbff; padding:12px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
-  .news-list { margin-top:18px; display:flex; flex-direction:column; gap:12px; }
-  .news-item { background:#fffdf5; padding:12px; border-left:4px solid #0a558c; border-radius:8px; }
-  @media (max-width:768px){main{padding:25px;}header h1{font-size:2.3em;}}
-  #pageContent {
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-  }
-  #pageContent.loading {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  marquee{background:#0a558c;color:white;padding:10px 0;font-weight:bold;}
-</style>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>JAL SURAKSHA BY ANIKET AND NAMINSH OF MDPS ROHINI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jal Suraksha - Flood Safety & Preparedness</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #0a558c;
+      --secondary: #69c3b3;
+      --accent: #ff6b6b;
+      --light: #f8fbff;
+      --dark: #1e324a;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom, #cfe3f6 0%, #e9f3ff 50%, #ffffff 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, #1a6ba8 100%);
+      color: white;
+      padding: 20px 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: relative;
+      text-align: center;
+    }
+    
+    header h1 {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #fff 0%, #e0f7fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px  rgba(0,0,0,0.1);
+    }
+    
+    header h2 {
+      font-size: 1.4rem;
+      font-weight: 400;
+      margin: 0;
+      opacity: 0.9;
+    }
+    
+    .marquee-container {
+      background: var(--primary);
+      color: white;
+      padding: 10px 0;
+      font-weight: bold;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .marquee-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+    .marquee-content i {
+      color: var(--accent);
+      font-size: 1.2rem;
+    }
+    
+    .nav-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
+    }
+    
+    .nav-buttons button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .nav-buttons button:hover {
+      background: var(--secondary);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    .nav-buttons button i {
+      font-size: 1.2rem;
+    }
+    
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(60, 90, 130, 0.15);
+      min-height: 500px;
+    }
+    
+    h2 {
+      font-size: 2.2rem;
+      color: var(--primary);
+      border-bottom: 2px solid #d6e4f7;
+      padding-bottom: 10px;
+      margin-top: 30px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .content-section {
+      display: none;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    
+    .content-section.active {
+      display: block;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin: 15px 0;
+    }
+    
+    .card h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .card h3 i {
+      color: var(--secondary);
+    }
+    
+    .flood-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .gallery-item {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .gallery-item:hover {
+      transform: translateY(-5px);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .gallery-item .caption {
+      padding: 10px;
+      background: var(--light);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    
+    .map-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+    
+    .map-container img {
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .precaution-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .precaution-card {
+      background: var(--light);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+      border-left: 4px solid var(--secondary);
+    }
+    
+    .precaution-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+    
+    .precaution-card h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+    
+    .news-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .news-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease;
+    }
+    
+    .news-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .news-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    
+    .news-content {
+      padding: 15px;
+    }
+    
+    .news-content h3 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+    
+    .news-content .date {
+      color: #666;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .emergency-contacts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .contact-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    
+    .contact-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .contact-card i {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    
+    .contact-card h3 {
+      margin: 10px 0;
+      color: var(--primary);
+    }
+    
+    .contact-card .number {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--accent);
+      margin: 10px 0;
+    }
+    
+    .contact-card .btn {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      text-decoration: none;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+    }
+    
+    .contact-card .btn:hover {
+      background: var(--secondary);
+    }
+    
+    .quiz-container {
+      max-width: 600px;
+      margin: 30px auto;
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .quiz-question {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+    
+    .quiz-options {
+      margin: 20px 0;
+    }
+    
+    .quiz-option {
+      background: var(--light);
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .quiz-option:hover {
+      background: #e0f7fa;
+    }
+    
+    .quiz-option.selected {
+      background: #d1ecf1;
+      border-left: 4px solid var(--secondary);
+    }
+    
+    .quiz-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-secondary {
+      background: var(--secondary);
+      color: white;
+    }
+    
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    
+    .chat-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+    
+    .chat-toggle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .chat-toggle:hover {
+      background: var(--secondary);
+      transform: scale(1.05);
+    }
+    
+    .chat-box {
+      position: absolute;
+      bottom: 70px;
+      right: 0;
+      width: 350px;
+      max-height: 500px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1000;
+    }
+    
+    .chat-box.active {
+      display: flex;
+    }
+    
+    .chat-header {
+      background: var(--primary);
+      color: white;
+      padding: 15px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      max-height: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .message {
+      padding: 10px 15px;
+      border-radius: 18px;
+      max-width: 80%;
+      position: relative;
+    }
+    
+    .user-message {
+      background: #d1ecf1;
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
+    }
+    
+    .bot-message {
+      background: #e9ecef;
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+    }
+    
+    .chat-input-area {
+      display: flex;
+      border-top: 1px solid #eee;
+      padding: 10px;
+    }
+    
+    .chat-input-area input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      outline: none;
+    }
+    
+    .chat-input-area button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+    
+    .chat-input-area button:hover {
+      background: var(--secondary);
+    }
+    
+    .live-news-container {
+      margin-top: 30px;
+    }
+    
+    .news-item {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px 0;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      border-left: 4px solid var(--secondary);
+    }
+    
+    .news-item h3 {
+      color: var(--primary);
+      margin-top: 0;
+    }
+    
+    .news-item .date {
+      color: #666;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: var(--dark);
+      padding: 20px;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .nav-buttons {
+        gap: 10px;
+      }
+      
+      .nav-buttons button {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+      }
+      
+      main {
+        padding: 20px 15px;
+      }
+      
+      .chat-box {
+        width: 300px;
+        right: -20px;
+      }
+    }
+  </style>
 </head>
 <body>
-<div id="google_translate_element" style="position:fixed; top:10px; right:10px; z-index:9999;"></div>
-<script type="text/javascript">
-   function googleTranslateElementInit() { new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element'); }
-</script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" type="text/javascript"></script>
-
-<div id="server-status" style="position: fixed; top: 10px; right: 10px; background: #222; color: #fff; padding: 6px 10px; border-radius: 10px; font-size: 14px; box-shadow: 0 0 10px rgba(0,0,0,0.3); z-index: 9999; opacity: 0; transition: opacity 0.5s ease;">Checking server...</div>
-
-<header>
-  <h1 style="font-size: 3.4rem; margin: 0;">Jal Suraksha</h1>
-  <h4 style="font-size: 1.5rem; font-weight: normal; margin: 0;">Empowering Lives, Saving Futures</h4>
-</header>
-
-<marquee>Currently no floods in India</marquee>
-
-<main id="mainContent">
-<h2 style="text-align: center; font-size: 4em; font-weight: 900; border-bottom: none; padding-bottom: 0; margin-bottom: 10px;"><u>Welcome</u></h2>
-<p style="text-align: center;">Here you can explore all about flood and flood resilient homes (ask our Mango bot if any queries).</p>
-
-<div class="nav-buttons">
-
-
-
-
-
-
-    
-<button onclick="showPage('flood')"> 🌊What are floods</button>
-<button onclick="showPage('jalshakti')">🔌 JalShakti: Order</button>
-<button onclick="showPage('precautions')">🛟 Precautions During Flood</button>
-<button onclick="showPage('plan')">🏠 Flood Resistant House</button>
-<button onclick="showPage('india')">🇮🇳 Indian Flood Updates</button>
-<button onclick="showPage('help')">📞 Call for Help</button>
-<button onclick="showPage('emergency')">🚑 Emergency Numbers</button>
-<button onclick="showPage('doctor')">🩺 Doctor Consultation</button>
-<button onclick="showPage('live')">📢 Live Community Updates</button>
-
-<!-- NEW BUTTONS ADDED (preserved from earlier) -->
-<button onclick="showPage('vision')">🌅 Our Vision (Samridh Bharat)</button>
-<button onclick="showPage('data')">📊 Data & Analysis</button>
-<button onclick="showPage('quiz')">🧩 Flood Quiz</button>
-<button onclick="showPage('scaling')">🇮🇳 Scaling for Bharat</button>
-</div>
-
-<div id="pageContent" style="margin-top:30px;">
-<!-- Updated default home content to show multiple Indian flood pictures and a map -->
-<div class="flood-gallery">
-  <img alt="Vadodara Flood 2019" src="https://i.ibb.co/6RyHzVGL/Screenshot-2025-11-01-123101.png"/>
-  <img alt="Assam Floods" src="https://i.ibb.co/XfnBNh48/Screenshot-2025-11-01-160021.png" />
-  <img alt="Patna Floods" src="https://i.ibb.co/2DhNQ0f/image.png"/>
-</div>
-
-<div class="map-img">
-  <h3>Flood-prone regions map (India)</h3>
- <div style="display: flex; justify-content: center;">
-  <img 
-    src="https://i.ibb.co/Vp0XKg8Q/image.png" 
-    alt="India flood prone map" 
-    style="width: 50%; max-width: 600px; height: auto;"
-  >
-</div>
-
-  <p class="small-note">Map shows common flood-prone regions: Brahmaputra & Ganga basins, coastal areas, and some western river systems.</p>
-</div>
-
-</div>
-</main>
-
-<!-- Chatbox (Mango) kept exactly as original -->
-<button id="chatButton">🥭</button>
-<div id="chatBox">
-  <div id="chatHeader">Ask Mango</div>
-  <div id="chatMessages"><div class="msg bot">👋 Hi! I'm Mango – your flood safety assistant. How can I help you today?</div></div>
-  <div id="chatInputArea">
-    <input accept="image/*" id="imageInput" style="display:none;" type="file"/>
-    <button id="imageBtn" style="background:#69c3b3;border:none;padding:8px 10px;cursor:pointer;font-size:16px;">📷</button>
-    <input id="chatInput" placeholder="Type your message..." type="text">
-    <button id="sendBtn">Send</button>
+  <header>
+    <div class="container">
+      <h1>🌊 Jal Suraksha</h1>
+      <h2>Empowering Lives, Saving Futures</h2>
+    </div>
+  </header>
+  
+  <div class="marquee-container">
+    <div class="marquee-content">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span>Currently no major floods reported in India. Stay informed and prepared!</span>
+    </div>
   </div>
-</div>
-
-<!-- Firebase SDKs (kept) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-
-<script>
-/* ---------- Mango chat scripts (kept intact) ---------- */
-const chatButton=document.getElementById('chatButton');
-const chatBox=document.getElementById('chatBox');
-const sendBtn=document.getElementById('sendBtn');
-const chatInput=document.getElementById('chatInput');
-const chatMessages=document.getElementById('chatMessages');
-const imageBtn=document.getElementById('imageBtn');
-const imageInput=document.getElementById('imageInput');
-
-chatButton.onclick=()=>{chatBox.style.display=chatBox.style.display==='flex'?'none':'flex';};
-imageBtn.onclick=()=>{imageInput.click();};
-imageInput.onchange=(e)=>{
-  const file = e.target.files[0];
-  if(file && file.type.startsWith('image/')){
-    appendMessage('user', '📷 [Image uploaded]');
-    setTimeout(()=>{ analyzeImage(file); }, 500);
-  }
-};
-
-function analyzeImage(file){
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const responses = [
-      "I can see water in this image. If this is floodwater, please move to higher ground immediately and avoid contact with it. Floodwater can be contaminated and dangerous.",
-      "This appears to show flooding. Make sure to:\n• Stay away from moving water\n• Don't walk or drive through it\n• Keep emergency supplies ready\n• Follow evacuation orders if issued",
-      "If you're experiencing flooding:\n• Move valuable items to higher floors\n• Turn off electricity in affected areas\n• Document damage for insurance\n• Contact emergency services if needed (dial 112)",
-      "I see what might be flood damage. After floods:\n• Don't touch electrical equipment when wet\n• Avoid drinking tap water until declared safe\n• Clean and disinfect everything that got wet\n• Watch for structural damage",
-      "Based on this image, ensure your safety first. If you're in a flood-prone area:\n• Monitor weather updates\n• Have an evacuation plan\n• Keep emergency kit ready\n• Stay informed through official channels"
-    ];
-    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-    appendMessage('bot', randomResponse);
-  };
-  reader.readAsDataURL(file);
-}
-
-function appendMessage(sender,text){
-  const div=document.createElement('div');
-  div.classList.add('msg',sender);
-  div.textContent=text;
-  chatMessages.appendChild(div);
-  chatMessages.scrollTop=chatMessages.scrollHeight;
-}
-
-let preData = {
-  "greetings": [
-    "Hi! How can I help with floods today?",
-    "Hello! Ask me about flood safety or resilient homes."
-  ],
-  "thanks": [
-    "You\"re welcome! Stay safe.",
-    "Glad to help!"
-  ],
-  "resilient": "Flood-resilient homes are elevated, waterproofed, and use durable materials. Check the Resilient Homes section for details.",
-  "default": "I\"m here to help with flood-related queries. Try asking about precautions, consequences, or resilient homes!",
-  "hi": "Hi! How can I help with floods today?",
-  "hello": "Hello! Ask me about flood safety or resilient homes.",
-  "hey": "Hey there! How can I assist you about floods?",
-  "thank you": "Glad to help! Stay prepared.",
-  "bye": "Goodbye! Stay safe and dry.",
-  "goodbye": "Goodbye! Remember to follow flood precautions!"
-};
-
-let memory = JSON.parse(localStorage.getItem("chadMemory") || "{}");
-function saveMemory(){ localStorage.setItem("chadMemory", JSON.stringify(memory)); }
-
-async function botReply(userText) {
-  const lower = userText.toLowerCase();
-  let reply = "In development! Data is being collected 🌧️";
-  for (const [question, answer] of Object.entries(memory)) {
-    if (lower.includes(question.toLowerCase())) {
-      reply = answer;
-      appendMessage('bot', reply);
-      return;
-    }
-  }
-  for (const [key, answer] of Object.entries(preData)) {
-    if (lower.includes(key)) {
-      reply = answer;
-      appendMessage('bot', reply);
-      return;
-    }
-  }
-  appendMessage('bot', "🤔🤔💭💭 Thinking...");
-  try {
-    const res = await fetch("https://mango-backend1-1.onrender.com/mango", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: userText })
-    });
-    const data = await res.json();
-    reply = data.reply || "I couldn’t get an answer right now. Try again later.";
-  } catch (err) {
-    reply = "⚠️ Error contacting Mango AI. Please check your connection.";
-    console.error(err);
-  }
-  appendMessage('bot', reply);
-}
-
-sendBtn.onclick=()=>{ const text=chatInput.value.trim(); if(!text)return; appendMessage('user',text); chatInput.value=""; setTimeout(()=>botReply(text),500); };
-
-/* ---------- Page switching + original content preserved where possible ---------- */
-
-let animationTimeout; // To prevent multiple animations running at once
-
-function typeOut(container, html) {
-  clearTimeout(animationTimeout);
-
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = html;
-
-  const wordsToReveal = [];
-
-  // Recursively traverse nodes to find text and wrap words in spans
-  function processNode(node) {
-    if (node.nodeType === 3 && node.textContent.trim().length > 0) { // It's a text node with content
-      const fragment = document.createDocumentFragment();
-      const text = node.textContent;
-      // Split by spaces to get words, but keep spaces
-      const parts = text.split(/(\s+)/); 
-
-      parts.forEach(part => {
-        if (part.trim().length > 0) {
-          const span = document.createElement('span');
-          span.textContent = part;
-          span.style.opacity = '0';
-          span.style.transition = 'opacity 0.2s ease-in-out';
-          fragment.appendChild(span);
-          wordsToReveal.push(span);
-        } else {
-          // It's just whitespace, append as a text node
-          fragment.appendChild(document.createTextNode(part));
-        }
-      });
-      node.parentNode.replaceChild(fragment, node);
-    } else if (node.nodeType === 1) { // It's an element node
-      // Process children of this element
-      Array.from(node.childNodes).forEach(processNode);
-    }
-  }
-
-  processNode(tempDiv);
-  container.innerHTML = '';
-  while (tempDiv.firstChild) {
-    container.appendChild(tempDiv.firstChild);
-  }
-
-  let i = 0;
-  function revealNextWord() {
-    if (i < wordsToReveal.length) {
-      wordsToReveal[i].style.opacity = '1';
-      i++;
-      animationTimeout = setTimeout(revealNextWord, 40); // Speed of word reveal
-    }
-  }
-  revealNextWord();
-}
-
-function showPage(page) {
-  const content=document.getElementById('pageContent');
-  if(!content) return;
-
-  // 1. Start the "slide out" animation
-  content.classList.add('loading');
-
-  // 2. Wait for the slide-out to finish, then update content
-  setTimeout(() => {
-    _updatePageContent(page, content);
-  }, 300); // This should match the CSS transition duration
-}
-
-function _updatePageContent(page, content) {
-  let newHtml = '';
   
-  
-  if(page==='flood'){
-  newHtml=`
-    <h2>Floods</h2>
-    <p>A flood is a natural disaster that occurs when water overflows onto land that is normally dry. Floods usually happen due to heavy rainfall, overflowing rivers, melting snow, dam failure, or coastal storms. When the ground cannot absorb excess water, it spreads rapidly into nearby areas, damaging homes, crops, roads, and infrastructure. Floods also pose serious risks to human life, animals, and the environment.</p>
-
-    <div style="display:flex; flex-wrap:wrap; gap:25px; align-items:center; margin-top:25px;">
-      <div class="precaution-grid" style="flex:1.5; min-width:300px; margin-top:0;">
-        <div class="precaution-card">
-          <h3>What Are Floods</h3>
-          <p class="small-note">Floods occur when water levels rise beyond the capacity of rivers, lakes, or drainage systems, causing water to spread over land. They can develop slowly over days or suddenly within hours, depending on weather conditions and geography.</p>
-        </div>
-        <div class="precaution-card">
-          <h3>Flash Floods</h3>
-          <p class="small-note">Flash floods are extremely rapid floods caused by intense rainfall, cloudbursts, or sudden release of water from dams. They develop within minutes or hours and are highly dangerous because they provide little or no warning.</p>
-        </div>
-        <div class="precaution-card">
-          <h3>Causes of Floods</h3>
-          <p class="small-note">Common causes include prolonged heavy rain, blocked drainage systems, river overflow, deforestation, urbanization, and cyclones. In hilly regions, flash floods are often triggered by cloudbursts.</p>
-        </div>
-        <div class="precaution-card">
-          <h3>Effects of Floods</h3>
-          <p class="small-note">Floods can lead to loss of life, destruction of property, spread of waterborne diseases, displacement of people, and long-term economic damage.</p>
-        </div>
-      </div>
-      <div style="flex:1; min-width:280px; text-align:center;">
-        <img src="https://i.ibb.co/DP6F09NZ/Screenshot-2025-12-18-211359.png" alt="Flood illustration" style="max-width:100%; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.15);">
-      </div>
+  <div class="container">
+    <div class="nav-buttons">
+      <button onclick="showSection('home')"><i class="fas fa-home"></i> Home</button>
+      <button onclick="showSection('flood')"><i class="fas fa-water"></i> What are Floods</button>
+      <button onclick="showSection('precautions')"><i class="fas fa-shield-alt"></i> Precautions</button>
+      <button onclick="showSection('resilient')"><i class="fas fa-home"></i> Flood Resistant Homes</button>
+      <button onclick="showSection('news')"><i class="fas fa-newspaper"></i> Live News</button>
+      <button onclick="showSection('emergency')"><i class="fas fa-ambulance"></i> Emergency Contacts</button>
+      <button onclick="showSection('quiz')"><i class="fas fa-question-circle"></i> Flood Quiz</button>
     </div>
-    <div style="text-align:center; margin-top:25px;">
-      <button class="pop-quiz-btn" data-quiz="flood" style="background:#69c3b3; color:white; padding:10px 18px; border-radius:10px; font-weight:bold; border:none; cursor:pointer; font-size:1em;">
-        🧠 Pop Quiz!
-      </button>
-    </div>
-  `;
-}
-
- else if(page==='precautions'){
-  newHtml=`
-    <h2>Precautions During Flood</h2>
-    <p>When floods are expected, follow these essential precautions to ensure safety.</p>
     
-    <div style="display:flex; flex-wrap:wrap; gap:25px; align-items:center; margin-top:25px;">
-      <div class="precaution-grid" style="flex:1.5; min-width:300px; margin-top:0;">
-        <div class="precaution-card">
-          <h3>Move to Higher Grounds</h3>
-          <p class="small-note">If water levels are rising, move to the roof or an upper floor and alert neighbors.</p>
-        </div>
-        <div class="precaution-card">
-          <h3>Keep Emergency Kits Ready</h3>
-          <p class="small-note">Include water, non-perishable food, flashlight, batteries, medicines, and important documents.</p>
-        </div>
-        <div class="precaution-card">
-          <h3>Avoid Walking/Driving Through Floodwater</h3>
-          <p class="small-note">Just 15 cm of fast-moving water can knock a person down; 30 cm can move a car.</p>
-        </div>
-        <div class="precaution-card">
-          <h3>Unplug Electrical Devices</h3>
-          <p class="small-note">Turn off the main power supply before water reaches electrical outlets. Avoid contact with electrical equipment if wet.</p>
-        </div>
-      </div>
-      <div style="flex:1; min-width:280px; text-align:center;">
-        <img src="https://i.ibb.co/M5D8MwPp/image.png" alt="Flood safety illustration" style="max-width:400px; max-height:180px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.15);">
-      </div>
-    </div>
-    <div style="text-align:center; margin-top:25px;">
-      <button class="pop-quiz-btn" data-quiz="precautions" style="background:#69c3b3; color:white; padding:10px 18px; border-radius:10px; font-weight:bold; border:none; cursor:pointer; font-size:1em;">
-        🧠 Pop Quiz!
-      </button>
-    </div>
-  `;
-  } else if(page==='plan'){
-    newHtml=`
-      <h2>🏠 Flood Resistant House</h2>
-      <p>Flood-resistant houses combine modern architecture with safety engineering. Built to float or stand above flood levels, these designs focus on sustainability, safety, and affordability.</p>
-      <ul>
-        <li>🗼 Elevated on sturdy and reinforced platforms</li>
-        <li>🪵 Use of waterproof materials and hydrophobic coatings</li>
-        <li>🔋 Solar panels and rainwater harvesting systems</li>
-        <li>🌿 Green surroundings that improve soil drainage</li>
-      </ul>
-      <div style="text-align:center;margin-top:20px;">
-        <img src="https://i.postimg.cc/6QdQpYg5/flood4.jpg" alt="flood resistant house example" style="max-height:300px;" />
-        <p style="font-size:0.9em;color:#555;margin-top:5px;">Example of elevated flood-resistant architecture</p>
-      </div>`;
-    newHtml += `
-      <div style="text-align:center; margin-top:20px;">
-        <button class="pop-quiz-btn" data-quiz="house" style="background:#69c3b3; color:white; padding:10px 18px; border-radius:10px; font-weight:bold; border:none; cursor:pointer; font-size:1em;">🧠 Pop Quiz!</button>
-      </div>
-    `;
-  }
-
-  else if(page==='india'){
-    newHtml = `
-      <h2>🇮🇳 Recent Indian Flood Updates (2025)</h2>
-      <p>In September 2025, severe flooding and landslides affected several northern Indian states, including Punjab, Jammu and Kashmir, Uttarakhand, Delhi, and Himachal Pradesh, following prolonged and intense rainfall. Stay updated through official government channels, NDRF alerts, and local disaster management authorities for real-time information.</p>
-      <div class="card">
-        <strong>Key trends:</strong>
-        <ul>
-          <li> <b>Punjab experienced its worst floods in recent history, with 30 fatalities reported and over 354,000 people affected across all 23 districts, which were declared flood-hit</b></li>
-          <li>In Jammu and Kashmir, <b>more than 50 people died in the past fortnight due to heavy rains and flash floods</b>, with the Jammu-Srinagar National Highway closed for eight consecutive days due to landslides and road washouts</li>
-          <li><b>Delhi and the National Capital Region (NCR) also faced severe waterlogging, with the Yamuna River breaching its danger mark and floodwaters entering homes.
- Schools and offices in multiple regions, including Gurugram, Chandigarh, and Uttar Pradesh, were closed, and traffic congestion worsened due to flooded roads</b></li>
-        </ul>
-      </div>
-      <p class="small-note">The content here is for demo purposes. For live alerts, use official NDRF/IMD channels.<br><strong>Small Update:latest news has been added from google as of september 2025</strong></p>
-      <div style="text-align:center; margin-top:20px;">
-        <button class="pop-quiz-btn" data-quiz="india" style="background:#69c3b3; color:white; padding:10px 18px; border-radius:10px; font-weight:bold; border:none; cursor:pointer; font-size:1em;">
-          🧠 Pop Quiz!
-        </button>
-      </div>
-    `;
-  }
-
-  else if(page==='help'){
-    newHtml = `
-      <h2>📞 Call for Help</h2>
-      <p>If you are in an emergency situation during floods, please fill in your details below. Our system will alert the nearest rescue services.<strong>!DO NOT TAKE SERIOUSLY WE DO NOT HAVE ANY TEAM!</strong></p>
-      <div style="margin-top:20px;padding:20px;background:#f0f7ff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
-        <label for="helpName" style="font-weight:bold;color:#0a558c;">Your Name:</label><br>
-        <input id="helpName" type="text" placeholder="Enter your name" style="width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:6px;"><br>
-        <label for="helpAddress" style="font-weight:bold;color:#0a558c;">Your Address / Location:</label><br>
-        <input id="helpAddress" type="text" placeholder="Enter your full address" style="width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:6px;"><br>
-        <label for="helpProblem" style="font-weight:bold;color:#0a558c;">Describe the Problem:</label><br>
-        <textarea id="helpProblem" placeholder="Describe what kind of help you need..." style="width:100%;height:80px;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:6px;"></textarea><br>
-        <button id="callHelpBtn" style="background:#dc3545;color:white;border:none;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer;">🚨 Call</button>
-      </div>
-      <p id="helpMessage" style="margin-top:20px;font-size:1.2em;color:#088a0b;font-weight:bold;display:none;">🚑 Help is on the way!</p>
-    `;
-    // Use animation and then slide back in
-    typeOut(content, newHtml);
-    content.classList.remove('loading');
-
-    setTimeout(()=> {
-      const callBtn = document.getElementById('callHelpBtn');
-      if(callBtn){
-        callBtn.onclick = () => {
-          const name = document.getElementById('helpName').value.trim();
-          const address = document.getElementById('helpAddress').value.trim();
-          const problem = document.getElementById('helpProblem').value.trim();
-          if (!name || !address || !problem) {
-            alert('⚠️ Please fill in all fields before calling for help.');
-            return;
-          }
-          document.getElementById('helpMessage').style.display = 'block';
-          alert('📡 Your request has been sent. Rescue services have been notified.');
-        };
-      }
-    }, 150);
-    return; // Return early as we've handled content update and event binding
-  } else if(page==='emergency') {
-    newHtml = `
-      <h2>🚑 Emergency Numbers</h2>
-      <p>If you or someone near you is in danger or needs urgent medical, rescue, or disaster help, use the official helpline numbers below:</p>
-      <h3>📞 National Emergency Services</h3>
-      <ul>
-        <li><strong>Disaster Management Helpline:</strong> <a href="tel:1078" style="color:#0a558c;text-decoration:none;">1078</a></li>
-        <li><strong>National Emergency Number:</strong> <a href="tel:112" style="color:#0a558c;text-decoration:none;">112</a></li>
-        <li><strong>Ambulance Service:</strong> <a href="tel:108" style="color:#0a558c;text-decoration:none;">108</a></li>
-        <li><strong>Police Helpline:</strong> <a href="tel:100" style="color:#0a558c;text-decoration:none;">100</a></li>
-        <li><strong>Fire Department:</strong> <a href="tel:101" style="color:#0a558c;text-decoration:none;">101</a></li>
-      </ul>
-      <h3>🏛️ National Disaster Agencies</h3>
-      <ul>
-        <li><a href="https://www.ndrf.gov.in" target="_blank" rel="noopener noreferrer" style="color:#0a558c;text-decoration:none;">National Disaster Response Force (NDRF)</a></li>
-        <li><a href="https://ndma.gov.in" target="_blank" rel="noopener noreferrer" style="color:#0a558c;text-decoration:none;">National Disaster Management Authority (NDMA)</a></li>
-        <li><a href="https://www.nidm.gov.in" target="_blank" rel="noopener noreferrer" style="color:#0a558c;text-decoration:none;">National Institute of Disaster Management (NIDM)</a></li>
-      </ul>
-      <h3>❤️ Trusted NGOs & Relief Organizations</h3>
-      <ul>
-        <li><a href="https://www.redcross.org.in" target="_blank" rel="noopener noreferrer" style="color:#0a558c;text-decoration:none;">Indian Red Cross Society</a></li>
-        <li><a href="https://goonj.org" target="_blank" rel="noopener noreferrer" style="color:#0a558c;text-decoration:none;">Goonj Relief Network</a></li>
-        <li><a href="https://aidindia.org" target="_blank" rel="noopener noreferrer" style="color:#0a558c;text-decoration:none;">AID India Flood Support</a></li>
-        <li><a href="https://www.pmcares.gov.in" target="_blank" rel="noopener noreferrer" style="color:#0a558c;text-decoration:none;">PM CARES Fund</a></li>
-      </ul>
-      <p style="margin-top:20px;font-style:italic;color:#555;">💡 Save these numbers on your phone before a flood emergency occurs.</p>
-    `;
-  } else if(page==='doctor') {
-    newHtml = `
-      <h2>🩺 Doctor Consultation</h2>
-      <p>If you're feeling unwell during or after floods, consult a certified general physician instantly for medical guidance.</p>
-      <div style="margin-top:20px;padding:20px;background:#f0f7ff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);text-align:center;">
-        <p style="font-size:1.1em;color:#0a558c;font-weight:bold;">Connect with a doctor now:<br>for anyone whose call now button is not working type manually -->(+91) 1080888000</p>
-        <a href="tel:+911080888000" style="display:inline-block;background:#0a558c;color:white;text-decoration:none;padding:12px 20px;border-radius:10px;font-weight:bold;font-size:1.1em;">📞 Call Now</a>
-        <p style="margin-top:12px;font-size:0.9em;color:#555;">Available 24/7 through Apollo Hospitals helpline.</p>
-      </div>
-    `;
-  } else if(page==='live' || page==='liveupdates' || page==='live-updates') {
-    // open live updates - preserved Firebase usage
-    newHtml = `
-      <h2>📢 Live Community Updates</h2>
-      <p>Share real-time updates — flood level, help available, road closures, or safe spots. Posts are shared across all users.</p>
-      <div style="margin:20px 0;padding:20px;background:#f0f7ff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
-        <input id="updateName" type="text" placeholder="Your Name (optional)" style="width:100%;padding:10px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;">
-        <input id="updateLocation" type="text" placeholder="Location (e.g., Patna, Bihar)" style="width:100%;padding:10px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;">
-        <textarea id="updateMessage" placeholder="Write your update here..." style="width:100%;height:80px;padding:10px;border-radius:6px;border:1px solid #ccc;"></textarea>
-        <div style="display:flex;gap:10px;margin-top:10px;">
-          <button id="postUpdateBtn" style="background:#0a558c;color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;">Post Update</button>
-          <button id="refreshUpdatesBtn" style="background:#69c3b3;color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;">Refresh</button>
+    <main>
+      <!-- Home Section -->
+      <section id="home-section" class="content-section active">
+        <h2>Welcome to Jal Suraksha</h2>
+        <p>Explore all about floods, flood resilient homes, and safety measures. Our smart assistant Mango is here to help!</p>
         
-        </div>
-        <div id="offerHelpFields" style="display:none;margin-top:10px;">
-          <input id="offerType" type="text" placeholder="What can you offer? (boat / food / shelter)" style="width:100%;padding:10px;margin-top:8px;border-radius:6px;border:1px solid #ccc;">
-          <input id="offerContact" type="text" placeholder="Contact number / Telegram / WhatsApp" style="width:100%;padding:10px;margin-top:8px;border-radius:6px;border:1px solid #ccc;">
-        </div>
-      </div>
-      <div id="updatesList" style="margin-top:25px;"></div>
-    `;
-    // Use animation and then slide back in
-    typeOut(content, newHtml);
-    content.classList.remove('loading');
-
-    // wire up after short delay to allow DOM
-    setTimeout(()=> {
-      document.getElementById('postUpdateBtn').onclick = postUpdateToFirebase;
-      document.getElementById('refreshUpdatesBtn').onclick = ()=> db.ref('updates').once('value').then(renderUpdates);
-      document.getElementById('offerHelpToggle').onclick = ()=>{
-        const f = document.getElementById('offerHelpFields');
-        if(f.style.display==='none') f.style.display='block'; else f.style.display='none';
-      };
-      db.ref('updates').once('value').then(renderUpdates);
-    }, 200);
-    return; // Return early
-  }
-
-  /* ---------- NEW PAGES: Vision, Data, Innovation, Quiz, Scaling, JalShakti,---------- */
-
-  else if(page==='vision') {
-    newHtml = `
-      <h2>🌅 Vision — Samridh Bharat: Flood-Resilient Communities</h2>
-      <p>We want to make India's flood-prone areas stronger by creating inexpensive flood-resistant homes, getting communities ready, and building up local skills. This supports sustainable livelihoods, reduces disaster costs, and protects vulnerable families.</p>
-      <div class="card">
-        <strong>How this contributes to Samridh Bharat:</strong>
-        <ul>
-          <li>Reduces displacement and livelihood loss</li>
-          <li>Supports resilient agriculture and local markets</li>
-          <li>Creates jobs via local construction & materials</li>
-          <li>Aligns with UN SDGs — sustainable cities and climate action</li>
-        </ul>
-      </div>
-    `;
-  } else if(page==='data') {
-    newHtml = `
-      <h2>📊 Data & Analysis</h2>
-      <p>Below are sample visualisations to demonstrate how data can guide flood planning. (Mock/demo data.)</p>
-      <div class="card">
-        <canvas id="rainChart" width="400" height="220"></canvas>
-        <p class="small-note">Rainfall trend (mock): average monthly rainfall across a flood-prone region.</p>
-      </div>
-      <div class="card">
-        <canvas id="stateChart" width="400" height="220"></canvas>
-        <p class="small-note">Top 5 affected states by incidents (mock data).</p>
-      </div>
-    `;
-    // Use animation and then slide back in
-    typeOut(content, newHtml);
-    content.classList.remove('loading');
-    setTimeout(()=>{ renderCharts(); }, 250);
-    return; // Return early
-  } else if(page==='quiz') {
-    newHtml = `
-      <h2>🧩 Flood Awareness Quiz</h2>
-      <p>Test your knowledge — 5 quick questions. Get a shareable result at the end.</p>
-      <div class="card" id="quizCard">
-        <div id="quizQuestion"></div>
-        <div id="quizOptions" style="margin-top:12px;"></div>
-        <div style="margin-top:12px;">
-          <button id="nextQ" style="background:#0a558c;color:white;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;">Next</button>
-        </div>
-        <div id="quizResult" style="display:none;margin-top:12px;"></div>
-      </div>
-    `;
-    // Use animation and then slide back in
-    typeOut(content, newHtml);
-    content.classList.remove('loading');
-    setTimeout(()=>{ startQuiz(); }, 200);
-    return; // Return early
-  } else if(page==='scaling') {
-    newHtml = `
-      <h2>🇮🇳 Scaling Flood-Resilient Homes for Bharat</h2>
-      <p>This section outlines a practical plan to scale the JalShakti model across flood-prone regions,"<strong>YOU CAN ORDER THE JalShakti MODEL FROM THE JalShakti:order PAGE AT THE START</strong>"</p>
-      <div class="card">
-        <strong>Key elements:</strong>
-        <ul>
-          <li>Prototype cost estimate: <strong>demo</strong> —> ₹1.5–2.5 thousand per unit (modular)</li>
-          <li>Partnerships: Local masons, NGOs, state disaster authorities, PM Awas Yojana integration<strong>(demo do not take seriously we have not partnered with any of them.)</strong></li>
-          <li>Financing: blended public grants + microfinance for households</li>
-          <li>Training: community build workshops & maintenance manuals</li>
-        </ul>
-      </div>
-      
-    `;
-  } else if(page==='jalshakti') {
-    newHtml = `
-      <h2>🔋 JalShakti: Order your JalShakti today</h2>
-      <p>JalShakti is a prototype micro-hydro generator device that uses the motion of floodwater and small streams to produce emergency electricity for essential and daily tasks during a flood.</p>
-      <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:18px;">
-        <div style="flex:1;min-width:260px;">
-          <img src="https://i.ibb.co/LD6D723Y/image.png" alt="JalShakti Prototype" style="border-radius:10px;"/>
-        </div>
-        <div style="flex:1;min-width:260px;">
-          <h3>Key features</h3>
-          <ul>
-         
-            <li><u>It is portable and modular and is also easy to deploy in flooded areas</u></li>
-            <li><u>It also produces enough power for lights, charging phones and running small lamps</u></li>
-            <li><u>It can charge phones,power banks and stoves for cooking food</u></li>
-            <li><u>Easy and simple maintainance ,Local parts are also used</u></li>
-          </ul>
-         <p style="margin-top:16px; font-size:18px;">
-  <strong>Order prototype:</strong>
-  <button 
-    onclick="alert('Thanks! We have received your order request. Please wait for some time.')"
-    style="background:#0a558c; 
-           color:white; 
-           border:none; 
-           padding:14px 20px; 
-           border-radius:10px; 
-           cursor:pointer; 
-           font-size:18px;">
-    Order JalShakti
-  </button>
-</p>
-
-        </div>
-      </div>
-      <p class="small-note" style="margin-top:12px;"><strong>(This is a prototype listing for demo purposes.)</strong></p>
-    `;
-
-  } else {
-    // default welcome content (kept updated with gallery & map)
-    newHtml = `
-      <div class="flood-resistant houses">
-        <img alt="Vadodara Flood 2019" src="https://i.ibb.co/6RyHzVGL/Screenshot-2025-11-01-123101.png"/>
-      
-      </div>
-      <div class="map-img">
-      
-    `;
-  }  
-  // Apply the animation for all pages that don't have special logic
-  // and then trigger the slide-in
-  typeOut(content, newHtml);
-  content.classList.remove('loading');
-}
-
-/* ---------- Firebase config + Live updates rendering (kept + small improvement) ---------- */
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB8W9WDY8Qmx3BzuQwB7p459ph0fiYx-Bs",
-  authDomain: "flood-updates.firebaseapp.com",
-  databaseURL: "https://flood-updates-default-rtdb.firebaseio.com",
-  projectId: "flood-updates",
-  storageBucket: "flood-updates.firebasestorage.app",
-  messagingSenderId: "563898722183",
-  appId: "1:563898722183:web:9031fad54e8e9b487b1522",
-  measurementId: "G-JXLY9VFWHY"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-function getClientId(){
-  let id = localStorage.getItem('flood_client_id');
-  if(!id){
-    id = 'c_' + Math.random().toString(36).substring(2,10) + Date.now().toString(36);
-    localStorage.setItem('flood_client_id', id);
-  }
-  return id;
-}
-const CLIENT_ID = getClientId();
-
-function showToast(msg,ms=2000){
-  let t = document.getElementById('live-toast');
-  if(!t){ t = document.createElement('div'); t.id='live-toast'; document.body.appendChild(t); }
-  t.textContent = msg; t.style.display = 'block'; setTimeout(()=>{ t.style.opacity='1'; },10);
-  setTimeout(()=>{ t.style.display='none'; },ms);
-}
-
-function renderUpdates(snapshot){
-  const data = snapshot.val() || {};
-  const arr = Object.keys(data).map(k=>({ key:k, ...data[k] }));
-  arr.sort((a,b)=> (b.timestamp||0) - (a.timestamp||0));
-  const container = document.getElementById('updatesList');
-  if(!container) return;
-  if(arr.length===0){ container.innerHTML = '<p style="text-align:center;color:#666;padding:20px;">No updates yet. Be the first to share!</p>'; return; }
-  container.innerHTML = arr.map(u=>{
-    const own = u.clientId === CLIENT_ID;
-    return `
-      <div style="background:white;border-left:4px solid #0a558c;padding:15px;margin:15px 0;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px;">
-          <div style="flex:1;">
-            <strong style="color:#0a558c;font-size:1.1em;">📍 ${escapeHtml(u.location||'Unknown')}</strong>
-            <div style="font-size:0.85em;color:#666;margin-top:3px;">Posted by <strong>${escapeHtml(u.name||'Anonymous')}</strong> • ${new Date(u.timestamp||0).toLocaleString('en-IN',{timeZone:'Asia/Kolkata', dateStyle:'medium', timeStyle:'short'})}</div>
+        <div class="flood-gallery">
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1593697821252-0f210d424cd0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Flood in Vadodara">
+            <div class="caption">Vadodara Flood 2019</div>
           </div>
-          ${ own ? `<button data-key="${u.key}" class="delete-btn" style="background:#dc3545;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;font-size:0.85em;">Delete</button>` : '' }
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1593697821252-0f210d424cd0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Assam Floods">
+            <div class="caption">Assam Floods</div>
+          </div>
+          <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1593697821252-0f210d424cd0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Patna Floods">
+            <div class="caption">Patna Floods</div>
+          </div>
         </div>
-        <p style="margin:10px 0 0 0;color:#333;line-height:1.6;">${escapeHtml(u.message||'')}</p>
-        ${ own ? `<div style="margin-top:8px;font-size:0.85em;color:#088a0b;">🟢 Posted by you</div>` : '' }
+        
+        <div class="map-container">
+          <h3><i class="fas fa-map-marked-alt"></i> Flood-prone Regions in India</h3>
+          <img src="https://images.unsplash.com/photo-1593697821252-0f210d424cd0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&h=600&q=80" alt="India Flood Map">
+          <p class="small-note">Map shows common flood-prone regions: Brahmaputra & Ganga basins, coastal areas, and some western river systems.</p>
+        </div>
+      </section>
+      
+      <!-- Flood Information Section -->
+      <section id="flood-section" class="content-section">
+        <h2><i class="fas fa-water"></i> What are Floods?</h2>
+        <p>A flood is a natural disaster that occurs when water overflows onto land that is normally dry. Floods usually happen due to heavy rainfall, overflowing rivers, melting snow, dam failure, or coastal storms.</p>
+        
+        <div class="precaution-grid">
+          <div class="precaution-card">
+            <h3><i class="fas fa-info-circle"></i> What Are Floods</h3>
+            <p>Floods occur when water levels rise beyond the capacity of rivers, lakes, or drainage systems, causing water to spread over land. They can develop slowly over days or suddenly within hours.</p>
+          </div>
+          <div class="precaution-card">
+            <h3><i class="fas fa-bolt"></i> Flash Floods</h3>
+            <p>Flash floods are extremely rapid floods caused by intense rainfall, cloudbursts, or sudden release of water from dams. They develop within minutes or hours and are highly dangerous.</p>
+          </div>
+          <div class="precaution-card">
+            <h3><i class="fas fa-cloud-rain"></i> Causes of Floods</h3>
+            <p>Common causes include prolonged heavy rain, blocked drainage systems, river overflow, deforestation, urbanization, and cyclones. In hilly regions, flash floods are often triggered by cloudbursts.</p>
+          </div>
+          <div class="precaution-card">
+            <h3><i class="fas fa-exclamation-triangle"></i> Effects of Floods</h3>
+            <p>Floods can lead to loss of life, destruction of property, spread of waterborne diseases, displacement of people, and long-term economic damage.</p>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+          <button class="btn btn-primary" onclick="showSection('quiz')"><i class="fas fa-question-circle"></i> Take Flood Quiz</button>
+        </div>
+      </section>
+      
+      <!-- Precautions Section -->
+      <section id="precautions-section" class="content-section">
+        <h2><i class="fas fa-shield-alt"></i> Precautions During Flood</h2>
+        <p>When floods are expected, follow these essential precautions to ensure safety.</p>
+        
+        <div class="precaution-grid">
+          <div class="precaution-card">
+            <h3><i class="fas fa-arrow-up"></i> Move to Higher Grounds</h3>
+            <p>If water levels are rising, move to the roof or an upper floor and alert neighbors.</p>
+          </div>
+          <div class="precaution-card">
+            <h3><i class="fas fa-medkit"></i> Keep Emergency Kits Ready</h3>
+            <p>Include water, non-perishable food, flashlight, batteries, medicines, and important documents.</p>
+          </div>
+          <div class="precaution-card">
+            <h3><i class="fas fa-car"></i> Avoid Walking/Driving Through Floodwater</h3>
+            <p>Just 15 cm of fast-moving water can knock a person down; 30 cm can move a car.</p>
+          </div>
+          <div class="preca0n-card">
+            <h3><i class="fas fa-plug"></i> Unplug Electrical Devices</h3>
+            <p>Turn off the main power supply before water reaches electrical outlets. Avoid contact with electrical equipment if wet.</p>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+          <button class="btn btn-primary" onclick="showSection('quiz')"><i class="fas fa-question-circle"></i> Take Flood Quiz</button>
+        </div>
+      </section>
+      
+      <!-- Flood Resistant Homes Section -->
+      <section id="resilient-section" class="content-section">
+        <h2><i class="fas fa-home"></i> Flood Resistant House</h2>
+        <p>Flood-resistant houses combine modern architecture with safety engineering. Built to float or stand above flood levels, these designs focus on sustainability, safety, and affordability.</p>
+        
+        <ul>
+          <li><i class="fas fa-tower-cell"></i> Elevated on sturdy and reinforced platforms</li>
+          <li><i class="fas fa-tree"></i> Use of waterproof materials and hydrophobic coatings</li>
+          <li><i class="fas fa-solar-panel"></i> Solar panels and rainwater harvesting systems</li>
+          <li><i class="fas fa-seedling"></i> Green surroundings that improve soil drainage</li>
+        </ul>
+        
+        <div style="text-align: center; margin-top: 20px;">
+          <img src="https://images.unsplash.com/photo-1593697821252-0f210d424cd0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500&q=80" alt="Flood Resistant House" style="max-width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+          <p class="small-note">Example of elevated flood-resistant architecture</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+          <button class="btn btn-primary" onclick="showSection('quiz')"><i class="fas fa-question-circle"></i> Take Flood Quiz</button>
+        </div>
+      </section>
+      
+      <!-- Live News Section -->
+      <section id="news-section" class="content-section">
+        <h2><i class="fas fa-newspaper"></i> Live Flood News Updates</h2>
+        <p>Stay informed with the latest flood news and updates from across India.</p>
+        
+        <div class="live-news-container">
+          <div class="news-item">
+            <h3>Heavy Rains Cause Flooding in Kerala</h3>
+            <div class="date"><i class="far fa-calendar"></i> October 15, 2023</div>
+            <p>Continuous heavy rainfall in Kerala has led to flooding in several districts. The state government has initiated evacuation procedures for low-lying areas.</p>
+          </div>
+          
+          <div class="news-item">
+            <h3>NDRF Deploys Teams in Assam Floods</h3>
+            <div class="date"><i class="far fa-calendar"></i> October 12, 2023</div>
+            <p>The National Disaster Response Force has deployed 15 teams in Assam to assist with flood relief operations. Over 50,000 people have been evacuated to safer locations.</p>
+          </div>
+          
+          <div class="news-item">
+            <h3>Bihar Flood Situation Improves</h3>
+            <div class="date"><i class="far fa-calendar"></i> October 10, 2023</div>
+            <p>Water levels in major rivers in Bihar have receded after three days of continuous rainfall. Relief operations are ongoing to assist affected families.</p>
+          </div>
+          
+          <div class="news-item">
+            <h3>West Bengal Issues Flood Alert</h3>
+            <div class="date"><i class="far fa-calendar"></i> October 8, 2023</div>
+            <p>West Bengal government has issued a red alert for potential flooding in South 24 Parganas district due to heavy rainfall predictions over the weekend.</p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Emergency Contacts Section -->
+      <section id="emergency-section" class="content-section">
+        <h2><i class="fas fa-ambulance"></i> Emergency Contacts</h2>
+        <p>If you or someone near you is in danger or needs urgent medical, rescue, or disaster help, use the official helpline numbers below:</p>
+        
+        <div class="emergency-contacts">
+          <div class="contact-card">
+            <i class="fas fa-phone-alt"></i>
+            <h3>National Emergency</h3>
+            <div class="number">112</div>
+            <p>All-in-one emergency number</p>
+            <a href="tel:112" class="btn">Call Now</a>
+          </div>
+          
+          <div class="contact-card">
+            <i class="fas fa-ambulance"></i>
+            <h3>Ambulance Service</h3>
+            <div class="number">108</div>
+            <p>Medical emergency assistance</p>
+            <a href="tel:108" class="btn">Call Now</a>
+          </div>
+          
+          <div class="contact-card">
+            <i class="fas fa-fire"></i>
+            <h3>Fire Department</h3>
+            <div class="number">101</div>
+            <p>Fire and rescue services</p>
+            <a href="tel:101" class="btn">Call Now</a>
+          </div>
+          
+          <div class="contact-card">
+            <i class="fas fa-shield-alt"></i>
+            <h3>Disaster Management</h3>
+            <div class="number">1078</div>
+            <p>National helpline</p>
+            <a href="tel:1078" class="btn">Call Now</a>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h3><i class="fas fa-hands-helping"></i> Trusted Relief Organizations</h3>
+          <ul>
+            <li><a href="https://www.redcross.org.in" target="_blank">Indian Red Cross Society</a></li>
+            <li><a href="https://goonj.org" target="_blank">Goonj Relief Network</a></li>
+            <li><a href="https://aidindia.org" target="_blank">AID India Flood Support</a></li>
+            <li><a href="https://www.pmcares.gov.in" target="_blank">PM CARES Fund</a></li>
+          </ul>
+        </div>
+      </section>
+      
+      <!-- Quiz Section -->
+      <section id="quiz-section" class="content-section">
+        <h2><i class="fas fa-question-circle"></i> Flood Awareness Quiz</h2>
+        <p>Test your knowledge about flood safety and preparedness. Get instant feedback!</p>
+        
+        <div class="quiz-container">
+          <div class="quiz-question" id="quiz-question">
+            What's the safest action during fast-moving flood water?
+          </div>
+          
+          <div class="quiz-options" id="quiz-options">
+            <div class="quiz-option" data-index="0">
+              <i class="far fa-circle"></i>
+              <span>Attempt to cross on foot</span>
+            </div>
+            <div class="quiz-option" data-index="1">
+              <i class="far fa-circle"></i>
+              <span>Move to higher ground immediately</span>
+            </div>
+            <div class="quiz-option" data-index="2">
+              <i class="far fa-circle"></i>
+              <span>Stay in your vehicle</span>
+            </div>
+            <div class="quiz-option" data-index="3">
+              <i class="far fa-circle"></i>
+              <span>Seek shelter in a basement</span>
+            </div>
+          </div>
+          
+          <div class="quiz-buttons">
+            <button class="btn btn-secondary" id="prev-btn"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button class="btn btn-primary" id="next-btn">Next <i class="fas fa-arrow-right"></i></button>
+          </div>
+          
+          <div id="quiz-result" style="margin-top: 20px; text-align: center; display: none;">
+            <h3>Your Score: <span id="score">0</span>/5</h3>
+            <p>Great job! You're well-prepared for flood situations.</p>
+            <button class="btn btn-primary" onclick="restartQuiz()">Restart Quiz</button>
+          </div>
+        </div>
+      </section>
+    </main>
+    
+    <div class="footer">
+      <p>© 2023 Jal Suraksha | Empowering Lives, Saving Futures</p>
+      <p>This is a demo project for educational purposes. For real emergencies, contact official authorities.</p>
+    </div>
+  </div>
+  
+  <!-- Chatbot -->
+  <div class="chat-container">
+    <button class="chat-toggle" id="chat-toggle">
+      <i class="fas fa-comments"></i>
+    </button>
+    <div class="chat-box" id="chat-box">
+      <div class="chat-header">
+        <span>Mango - Flood Safety Assistant</span>
+        <i class="fas fa-times"></i>
       </div>
-    `;
-  }).join('');
-  container.querySelectorAll('.delete-btn').forEach(btn=>{
-    btn.onclick = ()=> {
-      const key = btn.getAttribute('data-key');
-      if(!confirm('Delete this update?')) return;
-      db.ref('updates/' + key).once('value').then(s=>{
-        const obj = s.val();
-        if(obj && obj.clientId === CLIENT_ID){
-          db.ref('updates/' + key).remove();
+      <div class="chat-messages" id="chat-messages">
+        <div class="message bot-message">
+          <i class="fas fa-robot"></i> Hi! I'm Mango, your flood safety assistant. How can I help you today?
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Ask about floods, safety, or preparedness...">
+        <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Section navigation
+    function showSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      // Show selected section
+      document.getElementById(${sectionId}-section).classList.add('active');
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    // Chatbot functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const chatToggle = document.getElementById('chat-toggle');
+      const chatBox = document.getElementById('chat-box');
+      const chatMessages = document.getElementById('chat-messages');
+      const chatInput = document.getElementById('chat-input');
+      const sendBtn = document.getElementById('send-btn');
+      
+      // Toggle chat visibility
+      chatToggle.addEventListener('click', function() {
+        chatBox.classList.toggle('active');
+      });
+      
+      // Send message function
+      function sendMessage() {
+        const message = chatInput.value.trim();
+        if (message) {
+          // Add user message
+          addMessage(message, 'user');
+          chatInput.value = '';
+          
+          // Simulate bot thinking
+          setTimeout(() => {
+            const response = getBotResponse(message);
+            addMessage(response, 'bot');
+          }, 1000);
+        }
+      }
+      
+      // Add message to chat
+      function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        messageDiv.classList.add(sender + '-message');
+        
+        if (sender === 'bot') {
+          messageDiv.innerHTML = <i class="fas fa-robot"></i> ${text};
         } else {
-          alert("You can only delete your own posts.");
+          messageDiv.innerHTML = <i class="fas fa-user"></i> ${text};
+        }
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+      
+      // Get bot response based on user input
+      function getBotResponse(input) {
+        const lowerInput = input.toLowerCase();
+        
+        if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
+          return "Hello! I'm Mango, your flood safety assistant. How can I help you today?";
+        } else if (lowerInput.includes('flood') && lowerInput.includes('what')) {
+          return "A flood is a natural disaster that occurs when water overflows onto land that is normally dry. Floods usually happen due to heavy rainfall, overflowing rivers, or melting snow. They can be extremely dangerous and destructive.";
+        } else if (lowerInput.includes('safety') || lowerInput.includes('precaution')) {
+          return "During floods, move to higher ground immediately, avoid walking/driving through floodwater, unplug electrical devices, and keep emergency kits ready with water, food, and first aid supplies.";
+        } else if (lowerInput.includes('emergency') || lowerInput.includes('help')) {
+          return "In case of emergency, call 112 (national emergency number) immediately. You can also contact your local disaster management authority.";
+        } else if (lowerInput.includes('thank')) {
+          return "You're welcome! Stay safe and prepared!";
+        } else if (lowerInput.includes('quiz')) {
+          return "You can take our flood awareness quiz in the 'Flood Quiz' section to test your knowledge!";
+        } else if (lowerInput.includes('news') || lowerInput.includes('update')) {
+          return "Check the 'Live News' section for the latest flood updates across India.";
+        } else {
+          return "I'm here to help with flood safety information. You can ask about flood types, precautions, emergency contacts, or quiz questions. What would you like to know about?";
+        }
+      }
+      
+      // Event listeners
+      sendBtn.addEventListener('click', sendMessage);
+      
+      chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          sendMessage();
         }
       });
-    };
-  });
-}
-
-function escapeHtml(s){ if(!s) return ''; return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
-
-function openLiveUpdates(){ showPage('live'); }
-
-// post to firebase
-function postUpdateToFirebase(){
-  const name = (document.getElementById('updateName')?.value || '').trim() || 'Anonymous';
-  const location = (document.getElementById('updateLocation')?.value || '').trim();
-  const message = (document.getElementById('updateMessage')?.value || '').trim();
-  const offer = (document.getElementById('offerType')?.value || '').trim();
-  const contact = (document.getElementById('offerContact')?.value || '').trim();
-  let fullMessage = message;
-  if(offer) fullMessage += `\nOffer: ${offer} • Contact: ${contact || 'N/A'}`;
-  if(!location || !message){ alert('Please fill location and message'); return; }
-  const newRef = db.ref('updates').push();
-  const payload = { clientId: CLIENT_ID, name, location, message: fullMessage, timestamp: Date.now() };
-  newRef.set(payload).then(()=>{ document.getElementById('updateName').value=''; document.getElementById('updateLocation').value=''; document.getElementById('updateMessage').value=''; document.getElementById('offerType').value=''; document.getElementById('offerContact').value=''; showToast('✅ Update posted successfully!',2000); }).catch(err=>{ alert('Failed to post update: ' + err.message); });
-}
-
-db.ref('updates').on('value', function(snapshot){
-  const content = document.getElementById('pageContent');
-  if (content && content.querySelector('#updatesList')) { renderUpdates(snapshot); }
-});
-
-// initial button binding
-document.addEventListener('DOMContentLoaded', function(){
-  const btn = document.querySelector('[onclick*=\"live\"]');
-  if(btn){ btn.onclick = openLiveUpdates; }
-});
-
-/* ---------- Server status check (kept) ---------- */
-
-async function checkServerStatus() {
-  const statusDiv = document.getElementById("server-status");
-  const backendURL = "https://mango-backend1-1.onrender.com/";
-  try {
-    const res = await fetch(backendURL, { method: "GET" });
-    if (res.ok) {
-      statusDiv.textContent = "🟢 Online";
-      statusDiv.style.background = "#007a1e";
-      statusDiv.style.opacity = "1";
-    } else {
-      statusDiv.textContent = "🔴 Offline";
-      statusDiv.style.background = "#a30000";
-      statusDiv.style.opacity = "1";
-    }
-  } catch (err) {
-    statusDiv.textContent = "🔴 Offline";
-    statusDiv.style.background = "#a30000";
-    statusDiv.style.opacity = "1";
-  }
-}
-checkServerStatus();
-setInterval(checkServerStatus, 60000);
-
-/* ---------- Charts (Chart.js via CDN) ---------- */
-
-function renderCharts(){
-  // load Chart.js if not already
-  if(typeof Chart === 'undefined'){
-    const s = document.createElement('script'); s.src = "https://cdn.jsdelivr.net/npm/chart.js"; s.onload = renderCharts; document.head.appendChild(s); return;
-  }
-  // mock data for rainfall
-  const ctx = document.getElementById('rainChart').getContext('2d');
-  const rainChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-      datasets: [{ label: 'Avg monthly rainfall (mm)', data: [12,18,32,48,120,210,300,280,150,60,20,8], tension:0.3 }]
-    },
-    options: { responsive:true, plugins:{legend:{display:true}} }
-  });
-
-  // mock data for states
-  const ctx2 = document.getElementById('stateChart').getContext('2d');
-  const stateChart = new Chart(ctx2, {
-    type: 'bar',
-    data: {
-      labels: ['Assam','Bihar','Punjab','Uttarakhand','West Bengal'],
-      datasets: [{ label: 'Incidents (mock)', data: [120,95,80,45,70] }]
-    },
-    options: { responsive:true, plugins:{legend:{display:false}} }
-  });
-}
-
-/* ---------- Quiz logic ---------- */
-
-const QUIZ_QUESTIONS = [
-  {q: "What's the safest action during fast-moving flood water?", options:["Attempt to cross on foot","Move to higher ground immediately","Stay in your vehicle","Seek shelter in a basement"], a:1},
-  {q: "What should NOT be used after flood water settles down?", options:["Boil tap water before drinking","Eat canned food with intact seals","Use wet electrical appliances","Dry and disinfect all affected items"], a:2},
-  {q: "Which local resource helps absorb excess water and reduce flooding?", options:["Extensive concrete surfaces","Natural wetlands and green spaces","Large paved parking areas","Straightened river channels"], a:1},
-  {q: "A good emergency kit should include:", options:["Non-perishable food, water, first-aid, flashlight","Only personal documents and jewelry","Large, heavy blankets and pillows","A portable TV and gaming console"], a:0},
-  {q: "Who should you contact for immediate rescue in India?", options:["112 (All-in-one emergency)","100 (Police only)","911 (International emergency)","108 (Ambulance only)"], a:0}
-];
-
-function startQuiz(){
-  let idx = 0; let score = 0;
-  const qEl = document.getElementById('quizQuestion'); const oEl = document.getElementById('quizOptions'); const nextBtn = document.getElementById('nextQ'); const resEl = document.getElementById('quizResult');
-  function render(){
-    resEl.style.display='none';
-    qEl.innerHTML = `<h3>Q${idx+1}. ${QUIZ_QUESTIONS[idx].q}</h3>`;
-    oEl.innerHTML = QUIZ_QUESTIONS[idx].options.map((opt,i)=>`<div style="margin:6px 0;"><label style="display:block;padding:8px;border:1px solid #ccc;border-radius:8px;cursor:pointer;"><input type="radio" name="opt" value="${i}"> ${opt}</label></div>`).join('');
-    nextBtn.textContent = idx === QUIZ_QUESTIONS.length-1 ? 'Finish' : 'Next';
-  }
-  render();
-  nextBtn.onclick = ()=>{
-    const sel = document.querySelector('input[name="opt"]:checked');
-    if(!sel){ alert('Please select an option'); return; }
-    const val = parseInt(sel.value,10);
-    if(val === QUIZ_QUESTIONS[idx].a) score++;
-    idx++;
-    if(idx < QUIZ_QUESTIONS.length){ render(); } else {
-      qEl.innerHTML = ''; oEl.innerHTML = ''; nextBtn.style.display='none';
-      resEl.style.display='block';
-      resEl.innerHTML = `<h3>Your Score: ${score} / ${QUIZ_QUESTIONS.length}</h3><p class="small-note">Share your result with friends to spread awareness!</p><button id="shareQuiz" style="background:#69c3b3;color:white;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;">Share</button>`;
-      document.getElementById('shareQuiz').onclick = ()=> {
-        const text = `I scored ${score}/${QUIZ_QUESTIONS.length} on the Flood Awareness Quiz! Learn more at Jal-Suraksha project.<strong>on (hellogamer10.github.io/jal-suraksha)</strong>`;
-        if(navigator.share){ navigator.share({title:'Flood Quiz Result', text}); }
-        else { prompt('Copy and share:', text); }
-      };
-    }
-  };
-}
-
-/* ---------- Pop Quiz Logic ---------- */
-const popQuizzes = {
-  flood: {
-    info: "Flash floods are the most dangerous kind of floods because they combine the destructive power of a flood with incredible speed.",
-    question: "What type of flood develops within minutes or hours, often with little warning?",
-    hint: "It happens in a 'flash'.",
-    answer: "flash flood"
-  },
-  precautions: {
-    info: "Just 15 cm (6 inches) of fast-moving water can knock a person down.",
-    question: "How much fast-moving water does it take to move a standard car?\n\n(Enter a number in cm)",
-    hint: "It's double the amount that can knock a person down.",
-    answer: "30"
-  },
-  house: {
-    info: "Elevating a house on stilts or a solid foundation is a primary method of flood-proofing.",
-    question: "What is another key feature of a flood-resistant house design that deals with water contact?",
-    hint: "Think about making the walls and floors 'water-resistant'.",
-    answer: "waterproof"
-  },
-  india: {
-    info: "The National Disaster Response Force (NDRF) is India's specialized force for handling disaster situations.",
-    question: "What is India's all-in-one emergency helpline number?",
-    hint: "It's three digits.",
-    answer: "112"
-  }
-};
-
-
-/* ---------- Small helpers ---------- */
-
-document.addEventListener('click', (e)=>{
-  if(e.target && e.target.id === 'trainBtn'){
-    const q=document.getElementById('trainQ').value.trim(); const a=document.getElementById('trainA').value.trim();
-    if(!q||!a) return alert("Please fill both fields.");
-    memory[q]=a; saveMemory(); alert(`✅ mango learned: \"${q}\"`); document.getElementById('trainQ').value=''; document.getElementById('trainA').value='';
-  }
-  if(e.target && e.target.classList.contains('pop-quiz-btn')){
-    const button = e.target;
-    // Prevent multiple quizzes at once
-    if(document.querySelector('.pop-quiz-container')) {
-      document.querySelector('.pop-quiz-container').remove();
-    }
-    if(button.classList.contains('active')) {
-      button.classList.remove('active');
-      return;
-    }
-    document.querySelectorAll('.pop-quiz-btn.active').forEach(b => b.classList.remove('active'));
-    button.classList.add('active');
-
-    const quizType = e.target.getAttribute('data-quiz');
-    const quiz = popQuizzes[quizType];
-    if(quiz){
-      const quizContainer = document.createElement('div');
-      quizContainer.className = 'card pop-quiz-container';
-      quizContainer.style.marginTop = '20px';
-      quizContainer.innerHTML = `
-        <p style="font-size:0.9em;color:#555;margin:0 0 10px 0;">
-          <strong style="color:#0a558c;">💡 Did you know?</strong><br>${quiz.info}
-        </p>
-        <h4 style="margin:10px 0;">❓ Pop Quiz Question:</h4>
-        <p style="margin:0;">${quiz.question.replace(/\n/g, '<br>')}</p>
-        <p class="small-note" style="margin-top:4px;"><em>Hint: ${quiz.hint}</em></p>
-        <div style="display:flex; gap:10px; margin-top:15px;">
-          <input type="text" class="pop-quiz-input" placeholder="Your answer..." style="flex:1;padding:8px;border:1px solid #ccc;border-radius:6px;">
-          <button class="pop-quiz-submit" style="background:#0a558c;color:white;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;">Submit</button>
-        </div>
-        <div class="pop-quiz-result" style="margin-top:12px;font-weight:bold;"></div>
-      `;
-      // Insert the quiz card right after the button's parent div
-      button.parentElement.insertAdjacentElement('afterend', quizContainer);
-
-      quizContainer.querySelector('.pop-quiz-submit').onclick = () => {
-        const userAnswer = quizContainer.querySelector('.pop-quiz-input').value;
-        const resultDiv = quizContainer.querySelector('.pop-quiz-result');
-        if (userAnswer && userAnswer.toLowerCase().includes(quiz.answer.toLowerCase())) {
-          resultDiv.innerHTML = `<span style="color:#088a0b;">✅ Correct! Great job!</span>`;
-        } else {
-          resultDiv.innerHTML = `<span style="color:#dc3545;">❌ Not quite. The correct answer is: ${quiz.answer}.</span><br><small>Keep learning to stay safe!</small>`;
+      
+      // Quiz functionality
+      const quizQuestions = [
+        {
+          question: "What's the safest action during fast-moving flood water?",
+          options: [
+            "Attempt to cross on foot",
+            "Move to higher ground immediately",
+            "Stay in your vehicle",
+            "Seek shelter in a basement"
+          ],
+          answer: 1
+        },
+        {
+          question: "What should NOT be used after flood water settles down?",
+          options: [
+            "Boil tap water before drinking",
+            "Eat canned food with intact seals",
+            "Use wet electrical appliances",
+            "Dry and disinfect all affected items"
+          ],
+          answer: 2
+        },
+        {
+          question: "Which local resource helps absorb excess water and reduce flooding?",
+          options: [
+            "Extensive concrete surfaces",
+            "Natural wetlands and green spaces",
+            "Large paved parking areas",
+            "Straightened river channels"
+          ],
+          answer: 1
+        },
+        {
+          question: "A good emergency kit should include:",
+          options: [
+            "Non-perishable food, water, flashlight, batteries, medicines, and important documents",
+            "Only personal documents and jewelry",
+            "Large, heavy blankets and pillows",
+            "A portable TV and gaming console"
+          ],
+          answer: 0
+        },
+        {
+          question: "Who should you contact for immediate rescue in India?",
+          options: [
+            "112 (All-in-one emergency)",
+            "100 (Police only)",
+            "911 (International emergency)",
+            "108 (Ambulance only)"
+          ],
+          answer: 0
         }
-      };
+      ];
+      
+      let currentQuestion = 0;
+      let score = 0;
+      
+      const quizQuestionEl = document.getElementById('quiz-question');
+      const quizOptionsEl = document.getElementById('quiz-options');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const quizResultEl = document.getElementById('quiz-result');
+      const scoreEl = document.getElementById('score');
+      
+      function loadQuestion() {
+        if (currentQuestion < quizQuestions.length) {
+          quizQuestionEl.textContent = quizQuestions[currentQuestion].question;
+          quizOptionsEl.innerHTML = '';
+          
+          quizQuestions[currentQuestion].options.forEach((option, index) => {
+            const optionEl = document.createElement('div');
+            optionEl.classList.add('quiz-option');
+            optionEl.classList.add('option');
+            optionEl.dataset.index = index;
+            optionEl.innerHTML = 
+              <i class="far fa-circle"></i>
+              <span>${option}</span>
+            ;
+            optionEl.addEventListener('click', selectOption);
+            quizOptionsEl.appendChild(optionEl);
+          });
+          
+          quizResultEl.style.display = 'none';
+          nextBtn.textContent = currentQuestion === quizQuestions.length - 1 ? 'Finish' : 'Next';
+        } else {
+          // Show results
+          score = Math.min(score, 5);
+          quizResultEl.style.display = 'block';
+          scoreEl.textContent = score;
+        }
+      }
+      
+      function selectOption(e) {
+        const index = parseInt(e.target.closest('.quiz-option').dataset.index);
+        document.querySelectorAll('.quiz-option').forEach(opt => {
+          opt.classList.remove('selected');
+          opt.querySelector('i').className = 'far fa-circle';
+        });
+        
+        e.target.closest('.quiz-option').classList.add('selected');
+        e.target.closest('.quiz-option').querySelector('i').className = 'fas fa-check-circle';
+        
+        if (index === quizQuestions[currentQuestion].answer) {
+          score++;
+        }
+      }
+      
+      nextBtn.addEventListener('click', function() {
+        if (currentQuestion < quizQuestions.length - 1) {
+          currentQuestion++;
+          loadQuestion();
+        } else {
+          // Show results
+          quizQuestionEl.textContent = '';
+          quizOptionsEl.innerHTML = '';
+          nextBtn.style.display = 'none';
+          prevBtn.style.display = 'none';
+          quizResultEl.style.display = 'block';
+          scoreEl.textContent = score;
+        }
+      });
+      
+      prevBtn.addEventListener('click', function() {
+        if (currentQuestion > 0) {
+          currentQuestion--;
+          loadQuestion();
+        }
+      });
+      
+      // Initialize quiz
+      loadQuestion();
+    });
+    
+    function restartQuiz() {
+      currentQuestion = 0;
+      score = 0;
+      loadQuestion();
+      document.getElementById('next-btn').style.display = 'block';
+      document.getElementById('prev-btn').style.display = 'block';
+      document.getElementById('quiz-result').style.display = 'none';
     }
-  }
-});
-</script>
-
+  </script>
 </body>
 </html>
