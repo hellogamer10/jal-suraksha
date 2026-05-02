@@ -92,7 +92,6 @@
       gap: 15px;
       margin: 30px 0;
     }
-    
     .nav-buttons button {
       background: var(--primary);
       color: white;
@@ -102,7 +101,7 @@
       font-weight: bold;
       cursor: pointer;
       transition: all 0.3s ease;
-      display: flex;
+      flex;
       align-items: center;
       gap: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -133,8 +132,7 @@
       color: var(--primary);
       border-bottom: 2px solid #d6e4f7;
       padding-bottom: 10px;
-      margin-top: 30px;
-      margin-bottom: 20px;
+      margin: 30px 0 20px 0;
       text-align: center;
     }
     
@@ -226,13 +224,7 @@
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-      transition: transform 0.3s ease;
       border-left: 4px solid var(--secondary);
-    }
-    
-    .precaution-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
     }
     
     .precaution-card h3 {
@@ -399,7 +391,7 @@
     
     .btn-secondary {
       background: var(--secondary);
-      color: white;
+ color: white;
     }
     
     .btn:hover {
@@ -414,15 +406,14 @@
       z-index: 1000;
     }
     
-    .chat-toggle {
-      width: 60px;
+    .chat      width: 60px;
       height: 60px;
       border-radius: 50%;
       background: var(--primary);
       color: white;
       border: none;
       font-size: 1.8rem;
-      cursor: pointer;
+ cursor: pointer;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       display: flex;
       align-items: center;
@@ -490,7 +481,7 @@
     .bot-message {
       background: #e9ecef;
       align-self: flex-start;
-      border-bottom-left-radius: 5px;
+      border-bottom-radius: 5px;
     }
     
     .chat-input-area {
@@ -634,7 +625,7 @@
       
       <!-- Flood Information Section -->
       <section id="flood-section" class="content-section">
-        <h2><i class="fas fa-water"></i> What are Floods?</h2>
+        <h2><i class="fas fa-water"></i> What are Floods?</2>
         <p>A flood is a natural disaster that occurs when water overflows onto land that is normally dry. Floods usually happen due to heavy rainfall, overflowing rivers, melting snow, dam failure, or coastal storms.</p>
         
         <div class="precaution-grid">
@@ -679,7 +670,7 @@
             <h3><i class="fas fa-car"></i> Avoid Walking/Driving Through Floodwater</h3>
             <p>Just 15 cm of fast-moving water can knock a person down; 30 cm can move a car.</p>
           </div>
-          <div class="preca0n-card">
+          <div class="precaution-card">
             <h3><i class="fas fa-plug"></i> Unplug Electrical Devices</h3>
             <p>Turn off the main power supply before water reaches electrical outlets. Avoid contact with electrical equipment if wet.</p>
           </div>
@@ -698,7 +689,7 @@
         <ul>
           <li><i class="fas fa-tower-cell"></i> Elevated on sturdy and reinforced platforms</li>
           <li><i class="fas fa-tree"></i> Use of waterproof materials and hydrophobic coatings</li>
-          <li><i class="fas fa-solar-panel"></i> Solar panels and rainwater harvesting systems</li>
+          <li><i class="fas fa-solar-panel"></i> Solar and rainwater harvesting systems</li>
           <li><i class="fas fa-seedling"></i> Green surroundings that improve soil drainage</li>
         </ul>
         
@@ -743,105 +734,101 @@
           </div>
         </div>
       </section>
-      
-      <!-- Emergency Contacts Section -->
-      <section id="emergency-section" class="content-section">
-        <h2><i class="fas fa-ambulance"></i> Emergency Contacts</h2>
-        <p>If you or someone near you is in danger or needs urgent medical, rescue, or disaster help, use the official helpline numbers below:</p>
-        
-        <div class="emergency-contacts">
-          <div class="contact-card">
-            <i class="fas fa-phone-alt"></i>
-            <h3>National Emergency</h3>
-            <div class="number">112</div>
-            <p>All-in-one emergency number</p>
-            <a href="tel:112" class="btn">Call Now</a>
-          </div>
-          
-          <div class="contact-card">
-            <i class="fas fa-ambulance"></i>
-            <h3>Ambulance Service</h3>
-            <div class="number">108</div>
-            <p>Medical emergency assistance</p>
-            <a href="tel:108" class="btn">Call Now</a>
-          </div>
-          
-          <div class="contact-card">
-            <i class="fas fa-fire"></i>
-            <h3>Fire Department</h3>
-            <div class="number">101</div>
-            <p>Fire and rescue services</p>
-            <a href="tel:101" class="btn">Call Now</a>
-          </div>
-          
-          <div class="contact-card">
-            <i class="fas fa-shield-alt"></i>
-            <h3>Disaster Management</h3>
-            <div class="number">1078</div>
-            <p>National helpline</p>
-            <a href="tel:1078" class="btn">Call Now</a>
-          </div>
-        </div>
-        
-        <div class="card">
-          <h3><i class="fas fa-hands-helping"></i> Trusted Relief Organizations</h3>
-          <ul>
-            <li><a href="https://www.redcross.org.in" target="_blank">Indian Red Cross Society</a></li>
-            <li><a href="https://goonj.org" target="_blank">Goonj Relief Network</a></li>
-            <li><a href="https://aidindia.org" target="_blank">AID India Flood Support</a></li>
-            <li><a href="https://www.pmcares.gov.in" target="_blank">PM CARES Fund</a></li>
-          </ul>
-        </div>
-      </section>
-      
-      <!-- Quiz Section -->
-      <section id="quiz-section" class="content-section">
-        <h2><i class="fas fa-question-circle"></i> Flood Awareness Quiz</h2>
-        <p>Test your knowledge about flood safety and preparedness. Get instant feedback!</p>
-        
-        <div class="quiz-container">
-          <div class="quiz-question" id="quiz-question">
-            What's the safest action during fast-moving flood water?
-          </div>
-          
-          <div class="quiz-options" id="quiz-options">
-            <div class="quiz-option" data-index="0">
-              <i class="far fa-circle"></i>
-              <span>Attempt to cross on foot</span>
-            </div>
-            <div class="quiz-option" data-index="1">
-              <i class="far fa-circle"></i>
-              <span>Move to higher ground immediately</span>
-            </div>
-            <div class="quiz-option" data-index="2">
-              <i class="far fa-circle"></i>
-              <span>Stay in your vehicle</span>
-            </div>
-            <div class="quiz-option" data-index="3">
-              <i class="far fa-circle"></i>
-              <span>Seek shelter in a basement</span>
-            </div>
-          </div>
-          
-          <div class="quiz-buttons">
-            <button class="btn btn-secondary" id="prev-btn"><i class="fas fa-arrow-left"></i> Previous</button>
-            <button class="btn btn-primary" id="next-btn">Next <i class="fas fa-arrow-right"></i></button>
-          </div>
-          
-          <div id="quiz-result" style="margin-top: 20px; text-align: center; display: none;">
-            <h3>Your Score: <span id="score">0</span>/5</h3>
-            <p>Great job! You're well-prepared for flood situations.</p>
-            <button class="btn btn-primary" onclick="restartQuiz()">Restart Quiz</button>
-          </div>
-        </div>
-      </section>
-    </main>
+    </section>
     
-    <div class="footer">
-      <p>© 2023 Jal Suraksha | Empowering Lives, Saving Futures</p>
-      <p>This is a demo project for educational purposes. For real emergencies, contact official authorities.</p>
-    </div>
-  </div>
+    <!-- Emergency Contacts Section -->
+    <section id="emergency-section" class="content-section">
+      <h2><i class="fas fa-ambulance"></i> Emergency Contacts</h2>
+      <p>If you or someone near you is in danger or needs urgent medical, rescue, or disaster help, use the official helpline numbers below:</p>
+      
+      <div class="emergency-contacts">
+        <div class="contact-card">
+          <i class="fas fa-phone-alt"></i>
+          <h3>National Emergency</h3>
+          <div class="number">112</div>
+          <p>Medical emergency assistance</p>
+          <a href="tel:112" class="btn">Call Now</a>
+        </div>
+        
+        <div class="contact-card">
+          <i class="fas fa-ambulance"></i>
+          <h3>Ambulance Service</h3>
+          <div class="number">108</div>
+          <p>Medical emergency assistance</p>
+          <a href="tel:108" class="btn">Call Now</a>
+        </div>
+        
+        <div class="contact-card">
+          <i class="fas fa-fire"></i>
+          <h3>Fire Department</h3>
+          < class="number">101</div>
+          <p>Fire and rescue services</p>
+          <a href="tel:101" class="btn">Call Now</a>
+        </div>
+        
+        <div class="contact-card">
+          <i class="fas fa-shield-alt"></i>
+          <h3>Disaster Management</h3>
+          <div class="number">1078</div>
+          <p>National helpline</p>
+          <a href="tel:1078" class="btn">Call Now</a>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h3><i class="fas fa-hands-helping"></i> Trusted Relief Organizations</h3>
+        <ul>
+          <li><a href="https://www.redcross.org.in" target="_blank">Indian Red Cross Society</a></li>
+          <li><a href="https://goonj.org" target="_blank">Goonj Relief Network</a></li>
+          <li><a href="https://aidindia.org" target="_blank">AID India Flood Support</a></li>
+          <li><a href="https://www.pmcares.gov.in" target="_blank">PM CARES Fund</a></li>
+        </ul>
+      </div>
+    </section>
+    
+    <!-- Quiz Section -->
+    <section id="quiz-section" class="content-section">
+      <h2><i class="fas fa-question-circle"></i> Flood Awareness Quiz</h2>
+      <p>Test your knowledge about flood safety and preparedness. Get instant feedback!</p>
+      
+      <div class="quiz-container">
+        <div class="quiz-question" id="quiz-question">
+          What's the safest action during fast-moving flood water?
+        </div>
+        
+        <div class="quiz-options" id="quiz-options">
+          <div class="quiz-option" data-index="0">
+            <i class="far fa-circle"></i>
+            <span>Attempt to cross on foot</span>
+          </div>
+          <div class="quiz-option" data-index="1">
+            <i class="far fa-circle"></i>
+            <span>Move to higher ground immediately</span>
+          </div>
+          <div class="quiz-option" data-index="2">
+            <i class="far fa-circle"></i>
+            <span>Stay in your vehicle</span>
+          </div>
+          <div class="quiz-option" data-index="3">
+            <i class="far fa-circle"></i>
+            <span>Seek shelter in a basement</span>
+          </div>
+        </div>
+        
+        <div class="quiz-buttons">
+          <button class="btn btn-secondary" id="prev-btn"><i class="fas fa-arrow-left"></i> Previous</button>
+          <button class="btn btn-primary" id="next-btn">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <div id="quiz-result" style="margin-top: 20px; text-align: center; display: none;">
+          <h3>Your Score: <span id="score">0</span>/5</h3>
+          <p>Great job! You're well-prepared for flood situations.</p>
+          <button class="btn btn-primary" onclick="restartQuiz()">Restart Quiz</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
   
   <!-- Chatbot -->
   <div class="chat-container">
@@ -951,6 +938,7 @@
       // Event listeners
       sendBtn.addEventListener('click', sendMessage);
       
+      // Make sure to bind Enter key to send message
       chatInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
           sendMessage();
@@ -1018,7 +1006,7 @@
       const quizOptionsEl = document.getElementById('quiz-options');
       const prevBtn = document.getElementById('prev-btn');
       const nextBtn = document.getElementById('next-btn');
-      const quizResultEl = document.getElementById('quiz-result');
+      const quizResultEl document.getElementById('quiz-result');
       const scoreEl = document.getElementById('score');
       
       function loadQuestion() {
@@ -1026,7 +1014,7 @@
           quizQuestionEl.textContent = quizQuestions[currentQuestion].question;
           quizOptionsEl.innerHTML = '';
           
-          quizQuestions[currentQuestion].options.forEach((option, index) => {
+          quizQuestionsQuestion].options.forEach((option, index) => {
             const optionEl = document.createElement('div');
             optionEl.classList.add('quiz-option');
             optionEl.classList.add('option');
